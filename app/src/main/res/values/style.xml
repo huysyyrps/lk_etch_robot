@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--自定义header属性-->
+    <declare-styleable name="Header">
+        <attr name="header_title" format="string" />
+        <attr name="header_title_left" format="string" />
+        <attr name="header_title_right" format="string" />
+        <attr name="header_image_left" format="reference" />
+        <attr name="header_image_right" format="reference" />
+        <attr name="header_back_color" format="reference" />
+        <attr name="header_iv_left_bg" format="reference" />
+        <attr name="header_iv_right_bg" format="reference" />
+        <attr name="header_is_title_visiable" format="boolean" />
+        <attr name="header_is_left_iv_visiable" format="boolean" />
+        <attr name="header_is_right_tv_visiable" format="boolean" />
+        <attr name="header_is_right_iv_visiable" format="boolean" />
+        <attr name="header_is_left_tv_visiable" format="boolean" />
+    </declare-styleable>
+
+    <style name="Header">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">35dp</item>
+        <item name="background">@color/theme_color</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <!-- 自定义BaseButton属性   -->
+    <style name="BaseButton">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">25dp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textSize">13dp</item>
+        <item name="lineHeight">13dp</item>
+        <item name="android:layout_marginLeft">8dp</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:layout_marginBottom">5dp</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:paddingBottom">0dp</item>
+        <item name="android:paddingTop">0dp</item>
+    </style>
+
+    <!-- 自定义横向分割线属性   -->
+    <style name="HLine">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">@color/theme_color</item>
+        <item name="android:layout_marginRight">5dp</item>
+        <item name="android:layout_marginLeft">5dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_centerVertical">true</item>
+    </style>
+    <!-- 自定义纵向分割线属性   -->
+    <style name="Vine">
+        <item name="android:layout_width">1dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@color/theme_color</item>
+<!--        <item name="android:layout_marginRight">5dp</item>-->
+<!--        <item name="android:layout_marginLeft">5dp</item>-->
+    </style>
+
+    <!-- 自定义Button控件的属性-->
+    <declare-styleable name="BaseButton">
+        <!-- 背景颜色-->
+        <attr name="bg_color" format="color" />
+        <!-- 圆角大小-->
+        <attr name="bg_corner" format="dimension" />
+        <!-- 是否可以点击-->
+        <attr name="bg_client" format="boolean" />
+    </declare-styleable>
+
+    <!--自定义myTextView属性-->
+    <declare-styleable name="BaseTextView">
+        <attr name="tv_title" format="string" />
+        <attr name="tv_is_title_visiable" format="boolean" />
+        <attr name="tv_is_left_iv_visiable" format="boolean" />
+        <attr name="tv_font_size" format="integer" />
+    </declare-styleable>
+
+    <!--自定义MyTextView-->
+    <style name="MyTextView">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">20dp</item>
+        <item name="android:background">@null</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:layout_gravity">left|bottom</item>
+        <item name="android:layout_marginLeft">0dp</item>
+        <item name="android:paddingLeft">3dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textColor">@color/theme_color</item>
+    </style>
+
+    <!--自定义radionbutton属性-->
+    <style name="MainRadionButton">
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_width">35dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:button">@null</item>
+        <item name="android:paddingTop">3dip</item>
+        <item name="android:paddingBottom">0dip</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
+</resources>

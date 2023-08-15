@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".activity.MainActivity">
+
+
+    <com.skydroid.fpvlibrary.widget.GLHttpVideoSurface
+            android:id="@+id/fPVVideoView"
+            android:gravity="top"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="0dp"
+            android:layout_margin="0dp"
+            tools:ignore="MissingConstraints" />
+
+    <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:orientation="vertical"
+            android:background="@color/dialog_color">
+
+        <com.example.lk_etch_robot.view.BaseButton
+                android:id="@+id/rbCamera"
+                style="@style/MainRadionButton"
+                android:drawableTop="@drawable/ic_camera"
+                android:drawableTintMode="screen"
+                android:text="截图"
+                android:textSize="11dp"
+                android:textColor="@color/whith"
+                app:bg_color="@color/none_color"/>
+
+        <com.example.lk_etch_robot.view.BaseButton
+                android:id="@+id/rbVideo"
+                style="@style/MainRadionButton"
+                android:drawableTop="@drawable/ic_video"
+                android:text="录像"
+                android:textSize="11dp"
+                android:textColor="@color/whith"
+                app:bg_color="@color/none_color"/>
+        <com.example.lk_etch_robot.view.BaseButton
+                android:id="@+id/rbVideoClose"
+                android:visibility="gone"
+                style="@style/MainRadionButton"
+                android:drawableTop="@drawable/ic_video_close"
+                android:text="录像"
+                android:textSize="11dp"
+                android:textColor="@color/whith"
+                app:bg_color="@color/none_color"/>
+
+        <com.example.lk_etch_robot.view.BaseButton
+                android:id="@+id/rbSetting"
+                style="@style/MainRadionButton"
+                android:drawableTop="@drawable/ic_setting"
+                android:text="设置"
+                android:textSize="11dp"
+                android:textColor="@color/whith"
+                app:bg_color="@color/none_color"/>
+
+        <com.example.lk_etch_robot.view.BaseButton
+                android:id="@+id/rbBack"
+                style="@style/MainRadionButton"
+                android:drawableTop="@drawable/ic_finish"
+                android:text="返回"
+                android:textSize="11dp"
+                android:textColor="@color/whith"
+                app:bg_color="@color/none_color"/>
+
+    </RadioGroup>
+
+</FrameLayout>

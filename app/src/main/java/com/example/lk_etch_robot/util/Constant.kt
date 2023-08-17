@@ -8,7 +8,7 @@ object Constant {
 
 
     const val SAVE_IMAGE_PATH = "LuKe/Image"
-    const val SAVE_FORM_PATH = "LKACMFFORM"
+    const val SAVE_VIDEO_PATH = "LuKe/Video"
     const val api = "http://101.43.237.219:5000/app_api/client/init"
     const val COMPPHONE = "0537-2638599"//闸门
     const val SCANABACK = "/LKAScan"

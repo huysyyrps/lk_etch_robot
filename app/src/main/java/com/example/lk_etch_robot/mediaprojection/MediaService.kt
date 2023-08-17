@@ -1,14 +1,11 @@
-package com.example.lkacmf.util.mediaprojection
+package com.example.lk_etch_robot.mediaprojection
 
-import android.R
 import android.app.*
 import android.content.Context
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat.getSystemService
 
 
 class MediaService : Service() {

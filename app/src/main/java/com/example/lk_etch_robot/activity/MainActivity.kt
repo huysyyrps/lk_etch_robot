@@ -6,17 +6,15 @@ import android.content.Context
 import android.content.Intent
 import android.media.projection.MediaProjection
 import android.media.projection.MediaProjectionManager
-import android.os.Build
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.os.*
 import android.view.View
 import androidx.annotation.RequiresApi
 import com.example.lk_etch_robot.R
-import com.example.lk_etch_robot.util.*
 import com.example.lk_etch_robot.dialog.MainDialog
 import com.example.lk_etch_robot.dialog.SettingDialogCallBack
 import com.example.lk_etch_robot.mediaprojection.CaptureImage
+import com.example.lk_etch_robot.mediaprojection.RecordVideo
+import com.example.lk_etch_robot.util.*
 import com.skydroid.fpvlibrary.serial.SerialPortConnection
 import com.skydroid.fpvlibrary.serial.SerialPortControl
 import kotlinx.android.synthetic.main.activity_main.*
@@ -28,10 +26,13 @@ import kotlin.concurrent.scheduleAtFixedRate
 class MainActivity : BaseActivity(), View.OnClickListener {
     //视频渲染
     private lateinit var mFPVVideoClient: FPVVideoClient
+
     //usb连接实例
     private lateinit var mSerialPortConnection: SerialPortConnection
+
     //FPV控制
     private lateinit var mSerialPortControl: SerialPortControl
+
     //硬件串口连接实例（数传）
     private lateinit var mServiceConnection: SerialPortConnection
     private val mainHanlder = Handler(Looper.getMainLooper())
@@ -133,13 +134,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                 LogUtil.e("TAG", stringData)
                 //在设备上电后1S周期向遥控器接收端发送包含遥控器通讯帧率的数据包
                 if (stringData.startsWith("AE01") && stringData.length == 8) {
-                    if (ByteDataChange.HexStringToBytes(
-                            stringData.substring(
-                                0,
-                                6
-                            )
-                        ) == stringData.subSequence(6, 8)
-                    ) {
+                    if (ByteDataChange.HexStringToBytes(stringData.substring(0, 6)) == stringData.subSequence(6, 8)) {
                         //主机接受后判断帧率信息正常通信帧率在50以上，根据帧率大小确定通讯是否安全，然后向主机发送握手命令
                         if (Integer.valueOf(stringData.substring(4, 6), 16) > 50) {
                             mServiceConnection.sendData("BE0101C0".toByteArray())
@@ -187,16 +182,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.rbCamera -> {
-//                if (PermissionRequest.requestPermission(this)) {
-//                    var saveImageState = mFPVVideoClient.captureSnapshot(null, null)
-//                    if (saveImageState) {
-//                        R.string.save_success.showToast(this)
-//                    } else {
-//                        R.string.save_faile.showToast(this)
-//                    }
-//                }
-                mediaManager =
-                    getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
+                mediaManager = getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
                 if (mMediaProjection == null) {
                     val captureIntent: Intent = mediaManager.createScreenCaptureIntent()
                     startActivityForResult(captureIntent, Constant.TAG_ONE)
@@ -207,19 +193,21 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                 }
             }
             R.id.rbVideo -> {
-                if (PermissionRequest.requestPermission(this)) {
-                    var startVidepState = mFPVVideoClient.startRecord(null, null)//开始录像
-                    if (startVidepState) {
-                        R.string.start_video.showToast(this)
-                    }
+                mediaManager = getSystemService(MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
+                if (mMediaProjection == null) {
+                    //存在录屏授权的Activity
+                    val captureIntent: Intent = mediaManager.createScreenCaptureIntent()
+                    startActivityForResult(captureIntent, Constant.TAG_TWO);
+                } else {
+                    mMediaProjection?.let { RecordVideo().startRecord(mMediaProjection!!) }
                     rbVideo.visibility = View.GONE
                     rbVideoClose.visibility = View.VISIBLE
                 }
             }
             R.id.rbVideoClose -> {
+                RecordVideo().stopRecore()
                 rbVideo.visibility = View.VISIBLE
                 rbVideoClose.visibility = View.GONE
-                mFPVVideoClient.stopRecord()//结束录像
                 R.string.save_success.showToast(this)
             }
             R.id.rbSetting -> {
@@ -239,15 +227,27 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                                         (protectCurrent.substring(0, protectCurrent.length - 1)
                                             .toInt() * 1000).toString(16)
                                 }
-                                if (hexProtectVoltage.length==4){
-                                    hexProtectVoltage = hexProtectVoltage.substring(2,4)+hexProtectVoltage.substring(0,2)
+                                if (hexProtectVoltage.length == 4) {
+                                    hexProtectVoltage = hexProtectVoltage.substring(
+                                        2,
+                                        4
+                                    ) + hexProtectVoltage.substring(0, 2)
                                 }
-                                if (hexProtectCurrent.length==4){
-                                    hexProtectCurrent = hexProtectCurrent.substring(2,4)+hexProtectCurrent.substring(0,2)
+                                if (hexProtectCurrent.length == 4) {
+                                    hexProtectCurrent = hexProtectCurrent.substring(
+                                        2,
+                                        4
+                                    ) + hexProtectCurrent.substring(0, 2)
                                 }
 
                                 var data = "BE03$hexProtectVoltage$hexProtectCurrent"
-                                mServiceConnection.sendData("$data${ByteDataChange.HexStringToBytes(data)}".toByteArray())
+                                mServiceConnection.sendData(
+                                    "$data${
+                                        ByteDataChange.HexStringToBytes(
+                                            data
+                                        )
+                                    }".toByteArray()
+                                )
                             }
                         }
                     })
@@ -272,6 +272,12 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                 Constant.TAG_ONE -> {
                     mMediaProjection = data?.let { mediaManager.getMediaProjection(resultCode, it) }
                     mMediaProjection?.let { CaptureImage().captureImages(this, "image", it) }
+                }
+                Constant.TAG_TWO -> {
+                    mMediaProjection = data?.let { mediaManager.getMediaProjection(resultCode, it) }
+                    mMediaProjection?.let { RecordVideo().startRecord(mMediaProjection!!) }
+                    rbVideo.visibility = View.GONE
+                    rbVideoClose.visibility = View.VISIBLE
                 }
             }
         }

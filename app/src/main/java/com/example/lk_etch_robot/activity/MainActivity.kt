@@ -202,11 +202,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                     startActivityForResult(captureIntent, Constant.TAG_ONE)
                 } else {
                     mMediaProjection?.let {
-                        CaptureImage().captureImages(
-                            this@MainActivity,
-                            "image",
-                            it
-                        )
+                        CaptureImage().captureImages(this@MainActivity, "image", it)
                     }
                 }
             }

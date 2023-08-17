@@ -3,4 +3,6 @@
     <string name="save_success">保存成功</string>
     <string name="save_faile">保存失败</string>
     <string name="start_video">开始录制</string>
+    <string name="btn_sure">确定</string>
+    <string name="btn_cancel">取消</string>
 </resources>

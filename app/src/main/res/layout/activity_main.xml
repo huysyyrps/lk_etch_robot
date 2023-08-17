@@ -6,23 +6,117 @@
         android:layout_height="match_parent"
         tools:context=".activity.MainActivity">
 
-
-    <com.skydroid.fpvlibrary.widget.GLHttpVideoSurface
-            android:id="@+id/fPVVideoView"
-            android:gravity="top"
+    <FrameLayout
+        android:id="@+id/framLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="0dp"
-            android:layout_margin="0dp"
-            tools:ignore="MissingConstraints" />
+            android:layout_height="match_parent">
+        <com.skydroid.fpvlibrary.widget.GLHttpVideoSurface
+                android:id="@+id/fPVVideoView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="0dp"
+                android:gravity="top"
+                android:padding="0dp"
+                android:layout_marginRight="35dp"
+                tools:ignore="MissingConstraints" />
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="40dp"
+                android:background="@color/dialog_color">
+
+            <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="0.8"
+                    android:layout_height="30dp"
+                    android:orientation="horizontal">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="电池电压："
+                        android:textColor="@color/red"/>
+
+                <TextView
+                        android:id="@+id/tvVoltage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:textColor="@color/red"/>
+            </LinearLayout>
+            <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="0.8"
+                    android:layout_height="30dp"
+                    android:orientation="horizontal">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="工作电流："
+                        android:textColor="@color/red"/>
+
+                <TextView
+                        android:id="@+id/tvCurrent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:textColor="@color/red"/>
+            </LinearLayout>
+            <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="30dp"
+                    android:orientation="horizontal">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="测厚仪工作状态："
+                        android:textColor="@color/red"/>
+
+                <TextView
+                        android:id="@+id/tvEPKState"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:textColor="@color/red"/>
+            </LinearLayout>
+            <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="30dp"
+                    android:orientation="horizontal">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="机器人工作状态："
+                        android:textColor="@color/red"/>
+
+                <TextView
+                        android:id="@+id/tvRootState"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:textColor="@color/red"/>
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
 
     <RadioGroup
             android:id="@+id/radioGroup"
             android:layout_width="40dp"
             android:layout_height="match_parent"
             android:layout_gravity="right"
-            android:orientation="vertical"
-            android:background="@color/dialog_color">
+            android:background="@color/dialog_color"
+            android:orientation="vertical">
 
         <com.example.lk_etch_robot.view.BaseButton
                 android:id="@+id/rbCamera"
@@ -30,46 +124,46 @@
                 android:drawableTop="@drawable/ic_camera"
                 android:drawableTintMode="screen"
                 android:text="截图"
-                android:textSize="11dp"
                 android:textColor="@color/whith"
-                app:bg_color="@color/none_color"/>
+                android:textSize="11dp"
+                app:bg_color="@color/none_color" />
 
         <com.example.lk_etch_robot.view.BaseButton
                 android:id="@+id/rbVideo"
                 style="@style/MainRadionButton"
                 android:drawableTop="@drawable/ic_video"
                 android:text="录像"
-                android:textSize="11dp"
                 android:textColor="@color/whith"
-                app:bg_color="@color/none_color"/>
+                android:textSize="11dp"
+                app:bg_color="@color/none_color" />
+
         <com.example.lk_etch_robot.view.BaseButton
                 android:id="@+id/rbVideoClose"
-                android:visibility="gone"
                 style="@style/MainRadionButton"
                 android:drawableTop="@drawable/ic_video_close"
                 android:text="录像"
-                android:textSize="11dp"
                 android:textColor="@color/whith"
-                app:bg_color="@color/none_color"/>
+                android:textSize="11dp"
+                android:visibility="gone"
+                app:bg_color="@color/none_color" />
 
         <com.example.lk_etch_robot.view.BaseButton
                 android:id="@+id/rbSetting"
                 style="@style/MainRadionButton"
                 android:drawableTop="@drawable/ic_setting"
                 android:text="设置"
-                android:textSize="11dp"
                 android:textColor="@color/whith"
-                app:bg_color="@color/none_color"/>
+                android:textSize="11dp"
+                app:bg_color="@color/none_color" />
 
         <com.example.lk_etch_robot.view.BaseButton
                 android:id="@+id/rbBack"
                 style="@style/MainRadionButton"
                 android:drawableTop="@drawable/ic_finish"
                 android:text="返回"
-                android:textSize="11dp"
                 android:textColor="@color/whith"
-                app:bg_color="@color/none_color"/>
+                android:textSize="11dp"
+                app:bg_color="@color/none_color" />
 
     </RadioGroup>
-
 </FrameLayout>

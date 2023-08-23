@@ -21,12 +21,13 @@ class MainDialog {
     @SuppressLint("MissingPermission")
     fun SettingDialog(
         activity: MainActivity,
-        protectVoltage: String,
-        protectCurrent: String,
+        protectElectQuantity: Int,
+        changeElectQuantity: Int,
+        protectCurrent: Float,
         settingDialogCallBack: SettingDialogCallBack
     ) {
         dialog = MaterialDialog(activity)
-            .cancelable(false)
+            .cancelable(true)
             .show {
                 customView(    //自定义弹窗
                     viewRes = R.layout.dialog_setting,//自定义文件
@@ -36,21 +37,28 @@ class MainDialog {
                 )
                 cornerRadius(16f)
             }
-        dialog.etProtectVoltage.setText(protectVoltage)
-        dialog.etProtectCurrent.setText(protectCurrent)
+        dialog.etProtectElectQuantity.setText("$protectElectQuantity")
+        dialog.etChangeElectQuantity.setText("$changeElectQuantity")
+        dialog.etProtectCurrent.setText("$protectCurrent")
         dialog.btnFormCancel.setOnClickListener {
             dialog.dismiss()
         }
         dialog.btnFormSure.setOnClickListener {
-            if (dialog.etProtectVoltage.text.toString().trim {  it <= ' ' }==""){
-                "保护电压不能为空".showToast(activity)
+            if (dialog.etProtectElectQuantity.text.toString().trim {  it <= ' ' }==""){
+                "保护电量不能为空".showToast(activity)
+                return@setOnClickListener
+            }
+            if (dialog.etChangeElectQuantity.text.toString().trim {  it <= ' ' }==""){
+                "强制切换备用电源电量不能为空".showToast(activity)
                 return@setOnClickListener
             }
             if (dialog.etProtectCurrent.text.toString().trim {  it <= ' ' }==""){
                 "保护电流不能为空".showToast(activity)
                 return@setOnClickListener
             }
-            settingDialogCallBack.callBack(protectVoltage,protectCurrent)
+            settingDialogCallBack.callBack(dialog.etProtectElectQuantity.text.toString(),
+                dialog.etChangeElectQuantity.text.toString(),
+                dialog.etProtectCurrent.text.toString())
             dialog.dismiss()
         }
     }

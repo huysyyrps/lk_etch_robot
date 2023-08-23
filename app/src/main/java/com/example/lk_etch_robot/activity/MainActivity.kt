@@ -6,7 +6,10 @@ import android.content.Context
 import android.content.Intent
 import android.media.projection.MediaProjection
 import android.media.projection.MediaProjectionManager
-import android.os.*
+import android.os.Build
+import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import androidx.annotation.RequiresApi
 import com.example.lk_etch_robot.R
@@ -15,9 +18,13 @@ import com.example.lk_etch_robot.dialog.SettingDialogCallBack
 import com.example.lk_etch_robot.mediaprojection.CaptureImage
 import com.example.lk_etch_robot.mediaprojection.RecordVideo
 import com.example.lk_etch_robot.util.*
+import com.example.lk_etch_robot.util.BinaryChange.toBytes
 import com.skydroid.fpvlibrary.serial.SerialPortConnection
 import com.skydroid.fpvlibrary.serial.SerialPortControl
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.IOException
 import java.util.*
 import kotlin.concurrent.scheduleAtFixedRate
@@ -38,11 +45,18 @@ class MainActivity : BaseActivity(), View.OnClickListener {
     private val mainHanlder = Handler(Looper.getMainLooper())
     private var isSetTime = false
     private var exitTime: Long = 0
-    private var protectVoltage: String = "0V"
-    private var protectCurrent: String = "0A"
     val timer = Timer()
     private lateinit var mediaManager: MediaProjectionManager
     private var mMediaProjection: MediaProjection? = null
+
+    //保护电量
+    var protectElectQuantity = 0
+
+    //强制切换备用电源电量
+    var changeElectQuantity = 0
+
+    //保护电流
+    var protectCurrent = 0.0F
 
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,6 +73,11 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         initVideo()
         initData()
     }
+//
+//    override fun onResume() {
+//        super.onResume()
+//        fPVVideoView.init()
+//    }
 
     /**
      * 视频相关
@@ -120,48 +139,73 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         })
     }
 
-    /**
+    /**s
      * 数传
      */
     private fun initData() {
         //硬件串口实例
-        mServiceConnection = SerialPortConnection.newBuilder("/dev/ttyHS1", 921600)
-            .flags(1 shl 13)
-            .build()
+        mServiceConnection = SerialPortConnection.newBuilder("/dev/ttyHS1", 921600).flags(1 shl 13).build()
         mServiceConnection.setDelegate(object : SerialPortConnection.Delegate {
             override fun received(bytes: ByteArray, size: Int) {
                 var stringData = ByteDataChange.ByteToString(bytes)
                 LogUtil.e("TAG", stringData)
                 //在设备上电后1S周期向遥控器接收端发送包含遥控器通讯帧率的数据包
-                if (stringData.startsWith("AE01") && stringData.length == 8) {
-                    if (ByteDataChange.HexStringToBytes(stringData.substring(0, 6)) == stringData.subSequence(6, 8)) {
-                        //主机接受后判断帧率信息正常通信帧率在50以上，根据帧率大小确定通讯是否安全，然后向主机发送握手命令
-                        if (Integer.valueOf(stringData.substring(4, 6), 16) > 50) {
-                            mServiceConnection.sendData("BE0101C0".toByteArray())
-                        }
-                    }
+                if (stringData.startsWith("B101") && stringData.length == 10) {
+//                    if (ByteDataChange.HexStringToBytes(stringData.substring(0, 8)) == stringData.subSequence(8, 10)) {
+                    var s = ByteArray(4)
+                    s[0] = 0xA1.toByte()
+                    s[1] = 0x01
+                    s[2] = 0x01
+                    s[3] = 0xA3.toByte()
+                    mServiceConnection.sendData(s)
+//                    }
                 }
-                if (stringData.startsWith("AE03") && stringData.length == 14) {
-                    if (ByteDataChange.HexStringToBytes(stringData.substring(0, 12)) == stringData.subSequence(12, 14)) {
-                        var s = Integer.valueOf(stringData.substring(6, 8) + stringData.substring(4, 6), 16)
-                        protectVoltage = "${s / 1000}A"
-                        var s1 = Integer.valueOf(stringData.substring(10, 12) + stringData.substring(8, 10), 16)
-                        protectCurrent = "${s1 / 1000}V"
+                if (stringData.startsWith("B103") && stringData.length == 22) {
+                    if (ByteDataChange.HexStringToBytes(stringData.substring(0, 20)) == stringData.subSequence(20, 22)) {
+                        //保护电量
+                        protectElectQuantity = Integer.valueOf(stringData.substring(6, 8), 16)
+                        //强制切换备用电源电量
+                        changeElectQuantity = Integer.valueOf(stringData.substring(8, 10), 16)
+                        //保护电流
+                        protectCurrent = java.lang.Float.intBitsToFloat(Integer.valueOf(stringData.substring(10, 18), 16))
                         //定时读取
                         timer.scheduleAtFixedRate(0, 1000) {
-                            mServiceConnection.sendData("BE0201C1".toByteArray())
+                            var s = ByteArray(4)
+                            s[0] = 0xA1.toByte()
+                            s[1] = 0x02
+                            s[2] = 0x07
+                            s[3] = 0xAA.toByte()
+                            mServiceConnection.sendData(s)
                         }
                     }
                 }
-                if (stringData.startsWith("AE02") && stringData.length == 22) {
-                    if (ByteDataChange.HexStringToBytes(stringData.substring(0, 20)) == stringData.subSequence(20, 22)) {
-                        var voltage = Integer.valueOf(stringData.substring(6, 8) + stringData.substring(4, 6), 16)
-                        var current = Integer.valueOf(stringData.substring(10, 12) + stringData.substring(8, 10), 16)
-                        var height = Integer.valueOf(stringData.substring(14, 15) + stringData.substring(12, 14), 16)
-                        var lightState = Integer.valueOf(stringData.substring(16, 18), 16)
-                        var rate = Integer.valueOf(stringData.substring(18, 20), 16)
-                        tvVoltage.text = "${voltage / 1000}V"
-                        tvCurrent.text = "${current / 1000}V"
+                if (stringData.startsWith("B102") && stringData.length == 28) {
+                    if (ByteDataChange.HexStringToBytes(stringData.substring(0, 26)) == stringData.subSequence(26, 28)) {
+                        //当前工作电源
+                        var currentSupply = Integer.valueOf(stringData.substring(6, 8), 16)
+                        //当前主电源电量
+                        var mainElectQuantity = Integer.valueOf(stringData.substring(8, 10), 16)
+                        //当前备用电源电量
+                        var electQuantity = Integer.valueOf(stringData.substring(10, 12), 16)
+                        //当前工作电流
+                        var current = java.lang.Float.intBitsToFloat(Integer.valueOf(stringData.substring(12, 20), 16))
+                        //当前照明状态
+                        var lightState = Integer.valueOf(stringData.substring(20, 22), 16)
+                        //当前抬升位置
+                        var height = Integer.valueOf(stringData.substring(22, 24), 16)
+                        CoroutineScope(Dispatchers.Main).launch {
+                            if(currentSupply==1){
+                                tvCurrentSupply.text = "主电源"
+                            }else if(currentSupply==0){
+                                tvCurrentSupply.text = "备用电源"
+                            }
+
+                            tvMainElectQuantity.text = "$mainElectQuantity"
+                            tvElectQuantity.text = "$electQuantity"
+                            tvCurrent.text = "$current"
+                            tvLightState.text = "$lightState"
+                            tvHeight.text = "$height"
+                        }
                     }
                 }
             }
@@ -211,42 +255,33 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                 R.string.save_success.showToast(this)
             }
             R.id.rbSetting -> {
-                MainDialog().SettingDialog(this@MainActivity, protectVoltage, protectCurrent,
+                MainDialog().SettingDialog(this@MainActivity, protectElectQuantity, changeElectQuantity, protectCurrent,
                     object : SettingDialogCallBack {
-                        override fun callBack(protectVoltage: String, protectCurrent: String) {
+                        override fun callBack(protectElectQuantity: String, changeElectQuantity: String, protectCurrent: String) {
                             if (mSerialPortConnection.isConnection) {
-                                var hexProtectVoltage = ""
+                                var hexProtectElectQuantity = ""
+                                var hexChangeElectQuantity = ""
                                 var hexProtectCurrent = ""
-                                if (protectVoltage.endsWith("V")) {
-                                    hexProtectVoltage =
-                                        (protectVoltage.substring(0, protectVoltage.length - 1)
-                                            .toInt() * 1000).toString(16)
-                                }
-                                if (protectCurrent.endsWith("A")) {
-                                    hexProtectCurrent =
-                                        (protectCurrent.substring(0, protectCurrent.length - 1)
-                                            .toInt() * 1000).toString(16)
-                                }
-                                if (hexProtectVoltage.length == 4) {
-                                    hexProtectVoltage = hexProtectVoltage.substring(
-                                        2,
-                                        4
-                                    ) + hexProtectVoltage.substring(0, 2)
-                                }
-                                if (hexProtectCurrent.length == 4) {
-                                    hexProtectCurrent = hexProtectCurrent.substring(
-                                        2,
-                                        4
-                                    ) + hexProtectCurrent.substring(0, 2)
-                                }
-
-                                var data = "BE03$hexProtectVoltage$hexProtectCurrent"
+                                hexProtectElectQuantity = Integer.toHexString(protectElectQuantity.toInt())
+//                                if (protectElectQuantity.endsWith("%")) {
+//                                    hexProtectElectQuantity =
+//                                        Integer.toHexString(protectElectQuantity.substring(0, protectElectQuantity.length - 1).toInt())
+//                                }
+                                hexChangeElectQuantity = Integer.toHexString(changeElectQuantity.toInt())
+//                                if (changeElectQuantity.endsWith("%")) {
+//                                    hexChangeElectQuantity =
+//                                        Integer.toHexString(changeElectQuantity.substring(0, changeElectQuantity.length - 1).toInt())
+//                                }
+                                hexProtectCurrent = BinaryChange.singleToHex(protectCurrent.toFloat()).toString()
+//                                if (protectCurrent.endsWith("A")) {
+//                                    var str = protectCurrent.substring(0, protectCurrent.length - 1)
+//                                    hexProtectCurrent = BinaryChange.singleToHex(str.toFloat()).toString()
+//                                }
+                                var data = "A10303$hexProtectElectQuantity$hexChangeElectQuantity$hexProtectCurrent"
+                                data = "$data${ByteDataChange.HexStringToBytes(data)}"
+                                var arrayData = toBytes(data)
                                 mServiceConnection.sendData(
-                                    "$data${
-                                        ByteDataChange.HexStringToBytes(
-                                            data
-                                        )
-                                    }".toByteArray()
+                                    arrayData
                                 )
                             }
                         }

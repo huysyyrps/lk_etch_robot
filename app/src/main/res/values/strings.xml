@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LK_Etch_Robot</string>
+    <string name="app_name">腐蚀测厚机器人</string>
     <string name="save_success">保存成功</string>
     <string name="save_faile">保存失败</string>
     <string name="start_video">开始录制</string>

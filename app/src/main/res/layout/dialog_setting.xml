@@ -4,7 +4,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingLeft="20dp">
+        android:paddingLeft="10dp">
 
     <include layout="@layout/dialog_item_header" />
 
@@ -24,21 +24,37 @@
             <com.example.lk_etch_robot.view.BaseTextView
                     style="@style/MyTextView"
                     android:layout_width="wrap_content"
-                    app:tv_title="保护电压 " />
+                    app:tv_title="保护电量(%) " />
             <EditText
-                    android:id="@+id/etProtectVoltage"
+                    android:id="@+id/etProtectElectQuantity"
                     style="@style/EditText"
+                    android:layout_marginTop="0dp"
+                    android:inputType="number"
                     android:layout_width="match_parent"/>
 
 
             <com.example.lk_etch_robot.view.BaseTextView
                     style="@style/MyTextView"
                     android:layout_width="wrap_content"
-                    android:layout_marginTop="10dp"
-                    app:tv_title="保护电流" />
+                    android:layout_marginTop="5dp"
+                    app:tv_title="强制切换备用电源电量(%)" />
+            <EditText
+                    android:id="@+id/etChangeElectQuantity"
+                    style="@style/EditText"
+                    android:layout_marginTop="0dp"
+                    android:inputType="number"
+                    android:layout_width="match_parent"/>
+
+            <com.example.lk_etch_robot.view.BaseTextView
+                    style="@style/MyTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_marginTop="5dp"
+                    app:tv_title="保护电流(A)" />
             <EditText
                     android:id="@+id/etProtectCurrent"
                     style="@style/EditText"
+                    android:layout_marginTop="0dp"
+                    android:inputType="number|numberDecimal"
                     android:layout_width="match_parent"/>
 
         </LinearLayout>
@@ -46,7 +62,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:layout_gravity="right"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginRight="30dp"
                 android:layout_marginLeft="30dp"
                 android:layout_marginBottom="0dp"

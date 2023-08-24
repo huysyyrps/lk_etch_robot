@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.hardware.display.DisplayManager
+import android.media.MediaRecorder
 import android.media.projection.MediaProjection
 import android.media.projection.MediaProjectionManager
 import android.os.Build
@@ -16,6 +18,7 @@ import com.example.lk_etch_robot.R
 import com.example.lk_etch_robot.dialog.MainDialog
 import com.example.lk_etch_robot.dialog.SettingDialogCallBack
 import com.example.lk_etch_robot.mediaprojection.CaptureImage
+import com.example.lk_etch_robot.mediaprojection.MyMediaRecorder
 import com.example.lk_etch_robot.mediaprojection.RecordVideo
 import com.example.lk_etch_robot.util.*
 import com.example.lk_etch_robot.util.BinaryChange.toBytes
@@ -73,11 +76,6 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         initVideo()
         initData()
     }
-//
-//    override fun onResume() {
-//        super.onResume()
-//        fPVVideoView.init()
-//    }
 
     /**
      * 视频相关
@@ -148,7 +146,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         mServiceConnection.setDelegate(object : SerialPortConnection.Delegate {
             override fun received(bytes: ByteArray, size: Int) {
                 var stringData = ByteDataChange.ByteToString(bytes)
-                LogUtil.e("TAG", stringData)
+//                LogUtil.e("TAG", stringData)
                 //在设备上电后1S周期向遥控器接收端发送包含遥控器通讯帧率的数据包
                 if (stringData.startsWith("B101") && stringData.length == 10) {
 //                    if (ByteDataChange.HexStringToBytes(stringData.substring(0, 8)) == stringData.subSequence(8, 10)) {
@@ -204,7 +202,10 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                             tvElectQuantity.text = "$electQuantity"
                             tvCurrent.text = "$current"
                             tvLightState.text = "$lightState"
-                            tvHeight.text = "$height"
+//                            tvHeight.text = "$height"
+                            bv_battery.BatteryView()
+                            bv_battery.setProgress(height.toInt())
+//                            bv_battery.setProgress(30)
                         }
                     }
                 }
@@ -241,7 +242,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                 if (mMediaProjection == null) {
                     //存在录屏授权的Activity
                     val captureIntent: Intent = mediaManager.createScreenCaptureIntent()
-                    startActivityForResult(captureIntent, Constant.TAG_TWO);
+                    startActivityForResult(captureIntent, Constant.TAG_TWO)
                 } else {
                     mMediaProjection?.let { RecordVideo().startRecord(mMediaProjection!!) }
                     rbVideo.visibility = View.GONE
@@ -257,27 +258,15 @@ class MainActivity : BaseActivity(), View.OnClickListener {
             R.id.rbSetting -> {
                 MainDialog().SettingDialog(this@MainActivity, protectElectQuantity, changeElectQuantity, protectCurrent,
                     object : SettingDialogCallBack {
-                        override fun callBack(protectElectQuantity: String, changeElectQuantity: String, protectCurrent: String) {
+                        override fun callBack(protectElectQuantity: String, changeElectQuantity: String, protectCurrent: String, power:String) {
                             if (mSerialPortConnection.isConnection) {
                                 var hexProtectElectQuantity = ""
                                 var hexChangeElectQuantity = ""
                                 var hexProtectCurrent = ""
                                 hexProtectElectQuantity = Integer.toHexString(protectElectQuantity.toInt())
-//                                if (protectElectQuantity.endsWith("%")) {
-//                                    hexProtectElectQuantity =
-//                                        Integer.toHexString(protectElectQuantity.substring(0, protectElectQuantity.length - 1).toInt())
-//                                }
                                 hexChangeElectQuantity = Integer.toHexString(changeElectQuantity.toInt())
-//                                if (changeElectQuantity.endsWith("%")) {
-//                                    hexChangeElectQuantity =
-//                                        Integer.toHexString(changeElectQuantity.substring(0, changeElectQuantity.length - 1).toInt())
-//                                }
                                 hexProtectCurrent = BinaryChange.singleToHex(protectCurrent.toFloat()).toString()
-//                                if (protectCurrent.endsWith("A")) {
-//                                    var str = protectCurrent.substring(0, protectCurrent.length - 1)
-//                                    hexProtectCurrent = BinaryChange.singleToHex(str.toFloat()).toString()
-//                                }
-                                var data = "A10303$hexProtectElectQuantity$hexChangeElectQuantity$hexProtectCurrent"
+                                var data = "A10303$hexProtectElectQuantity$hexChangeElectQuantity$hexProtectCurrent$power"
                                 data = "$data${ByteDataChange.HexStringToBytes(data)}"
                                 var arrayData = toBytes(data)
                                 mServiceConnection.sendData(

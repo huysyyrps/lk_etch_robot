@@ -1,10 +1,9 @@
-package com.liwenzhi.screen
+package com.example.lk_etch_robot.mediaprojection
 
 import android.hardware.display.DisplayManager
 import android.hardware.display.VirtualDisplay
 import android.media.MediaRecorder
 import android.media.projection.MediaProjection
-import android.util.Log
 
 class MediaRecordService(
     private val mWidth: Int,
@@ -42,7 +41,8 @@ class MediaRecordService(
         mMediaRecorder!!.setOutputFile(mDstPath)
         mMediaRecorder!!.setVideoSize(mWidth, mHeight)
         mMediaRecorder!!.setVideoFrameRate(FRAME_RATE)
-        mMediaRecorder!!.setVideoEncodingBitRate(mBitRate)
+//        mMediaRecorder!!.setVideoEncodingBitRate(mBitRate)3 * 1920 * 1080
+        mMediaRecorder!!.setVideoEncodingBitRate(3 * 1920 * 1080)
         mMediaRecorder!!.setVideoEncoder(MediaRecorder.VideoEncoder.H264)
         try {
             mMediaRecorder!!.prepare()
@@ -70,6 +70,6 @@ class MediaRecordService(
 
     companion object {
         private const val TAG = "MediaRecordService"
-        private const val FRAME_RATE = 60 // 60 fps
+        private const val FRAME_RATE = 30 // 60 fps
     }
 }

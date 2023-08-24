@@ -152,14 +152,19 @@
                         android:text="抬升位置："
                         android:textSize="11dp"
                         android:textColor="@color/red"/>
-
-                <TextView
-                        android:id="@+id/tvHeight"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:textSize="11dp"
-                        android:textColor="@color/red"/>
+                <com.example.lk_etch_robot.view.BatteryView
+                        android:id="@+id/bv_battery"
+                        android:layout_width="35dp"
+                        android:layout_height="15dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_gravity="center"/>
+<!--                <TextView-->
+<!--                        android:id="@+id/tvHeight"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:gravity="center"-->
+<!--                        android:textSize="11dp"-->
+<!--                        android:textColor="@color/red"/>-->
             </LinearLayout>
         </LinearLayout>
     </FrameLayout>

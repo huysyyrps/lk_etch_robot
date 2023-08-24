@@ -6,7 +6,6 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import com.example.lk_etch_robot.activity.MainActivity
 import com.permissionx.guolindev.PermissionX
-import java.util.ArrayList
 
 object PermissionRequest {
     /**
@@ -19,6 +18,7 @@ object PermissionRequest {
         requestList.add(Manifest.permission.READ_EXTERNAL_STORAGE)
         requestList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
         requestList.add(Manifest.permission.ACCESS_FINE_LOCATION)
+        requestList.add(Manifest.permission.RECORD_AUDIO)
         requestList.add(Manifest.permission.ACCESS_WIFI_STATE)
         requestList.add(Manifest.permission.CAMERA)
         if (requestList.isNotEmpty()) {

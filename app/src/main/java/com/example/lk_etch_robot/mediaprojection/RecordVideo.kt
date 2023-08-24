@@ -2,9 +2,7 @@ package com.example.lk_etch_robot.mediaprojection
 
 import android.media.projection.MediaProjection
 import android.os.Environment
-import com.example.lk_etch_robot.util.BitmapSave
 import com.example.lk_etch_robot.util.Constant
-import com.liwenzhi.screen.MediaRecordService
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -21,7 +19,7 @@ class RecordVideo {
         }
         //将要保存的图片文件
         val mFile = File(dir + getNowDate())
-       var mediaRecord = MediaRecordService(1920, 1280,
+       var mediaRecord = MediaRecordService(2400, 1080,
            6000000, 1, mMediaProjection, mFile.absolutePath)
         mediaRecord.start()
     }

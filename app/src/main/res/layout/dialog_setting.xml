@@ -2,16 +2,43 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
+        android:layout_marginBottom="0dp"
         android:paddingLeft="10dp">
 
-    <include layout="@layout/dialog_item_header" />
+<!--    <include layout="@layout/dialog_item_header" />-->
+
+    <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_gravity="center"
+            android:background="@drawable/shape_tab_bg"
+            app:tabIndicator="@drawable/shape_full_tab_indicator"
+            app:tabIndicatorColor="@color/theme_back_color"
+            app:tabIndicatorFullWidth="true"
+            app:tabIndicatorHeight="25dp"
+            app:tabMinWidth="199dp"
+            android:layout_margin="10dp"
+            app:tabMode="fixed"
+            app:tabSelectedTextColor="@color/red"
+            app:tabTextColor="@color/white">
+
+        <com.google.android.material.tabs.TabItem
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/power_on" />
+
+        <com.google.android.material.tabs.TabItem
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/power_off" />
+    </com.google.android.material.tabs.TabLayout>
 
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:layout_marginBottom="0dp"
             android:orientation="vertical"
             android:paddingBottom="0dp">
@@ -24,7 +51,7 @@
             <com.example.lk_etch_robot.view.BaseTextView
                     style="@style/MyTextView"
                     android:layout_width="wrap_content"
-                    app:tv_title="保护电量(%) " />
+                    app:tv_title="保护电量(%  \u3000范围:20~90) " />
             <EditText
                     android:id="@+id/etProtectElectQuantity"
                     style="@style/EditText"
@@ -37,7 +64,7 @@
                     style="@style/MyTextView"
                     android:layout_width="wrap_content"
                     android:layout_marginTop="5dp"
-                    app:tv_title="强制切换备用电源电量(%)" />
+                    app:tv_title="强制切换备用电源电量(%   \u3000范围:10~保护电量)" />
             <EditText
                     android:id="@+id/etChangeElectQuantity"
                     style="@style/EditText"
@@ -49,43 +76,45 @@
                     style="@style/MyTextView"
                     android:layout_width="wrap_content"
                     android:layout_marginTop="5dp"
-                    app:tv_title="保护电流(A)" />
+                    app:tv_title="保护电流(A   \u3000范围:2.0~6.0)" />
             <EditText
                     android:id="@+id/etProtectCurrent"
                     style="@style/EditText"
                     android:layout_marginTop="0dp"
+                    android:layout_marginBottom="0dp"
                     android:inputType="number|numberDecimal"
                     android:layout_width="match_parent"/>
 
         </LinearLayout>
-        <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:layout_gravity="right"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="30dp"
-                android:layout_marginLeft="30dp"
+    </LinearLayout>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="0dp"
+            android:orientation="horizontal">
+
+        <com.example.lk_etch_robot.view.BaseButton
+                android:id="@+id/btnFormCancel"
+                style="@style/BaseButton"
                 android:layout_marginBottom="0dp"
-                android:orientation="horizontal">
+                android:layout_width="0dp"
+                android:layout_marginRight="20dp"
+                android:layout_weight="1"
+                android:text="@string/btn_cancel"
+                app:bg_color="@color/theme_color"
+                app:bg_corner="5dp" />
 
-            <com.example.lk_etch_robot.view.BaseButton
-                    android:id="@+id/btnFormCancel"
-                    style="@style/BaseButton"
-                    android:layout_width="0dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_weight="1"
-                    android:text="@string/btn_cancel"
-                    app:bg_color="@color/theme_color"
-                    app:bg_corner="5dp" />
-
-            <com.example.lk_etch_robot.view.BaseButton
-                    android:id="@+id/btnFormSure"
-                    style="@style/BaseButton"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:text="@string/btn_sure"
-                    app:bg_color="@color/theme_color"
-                    app:bg_corner="5dp" />
-        </LinearLayout>
+        <com.example.lk_etch_robot.view.BaseButton
+                android:id="@+id/btnFormSure"
+                style="@style/BaseButton"
+                android:layout_marginBottom="0dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:text="@string/btn_sure"
+                app:bg_color="@color/theme_color"
+                app:bg_corner="5dp" />
     </LinearLayout>
 </LinearLayout>

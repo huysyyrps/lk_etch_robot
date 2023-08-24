@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.media.projection.MediaProjection
 import android.media.projection.MediaProjectionManager
 import android.os.Build
@@ -15,20 +16,21 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.example.lk_etch_robot.R
 import com.example.lk_etch_robot.dialog.MainDialog
-import com.example.lk_etch_robot.dialog.SaveDialogCallBack
 import com.example.lk_etch_robot.dialog.SettingDialogCallBack
 import com.example.lk_etch_robot.mediaprojection.CaptureImage
 import com.example.lk_etch_robot.util.*
 import com.example.lk_etch_robot.util.BinaryChange.toBytes
 import com.mask.mediaprojection.interfaces.MediaRecorderCallback
+import com.mask.mediaprojection.interfaces.ScreenCaptureCallback
 import com.mask.mediaprojection.utils.MediaProjectionHelper
+import com.mask.photo.interfaces.SaveBitmapCallback
+import com.mask.photo.utils.BitmapUtils
 import com.skydroid.fpvlibrary.serial.SerialPortConnection
 import com.skydroid.fpvlibrary.serial.SerialPortControl
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import java.io.File
 import java.io.IOException
 import java.util.*
@@ -230,14 +232,17 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         when (v?.id) {
             R.id.rbCamera -> {
                 mediaManager = getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
-                if (mMediaProjection == null) {
-                    val captureIntent: Intent = mediaManager.createScreenCaptureIntent()
-                    startActivityForResult(captureIntent, Constant.TAG_ONE)
-                } else {
-                    mMediaProjection?.let {
-                        CaptureImage().captureImages(this@MainActivity, "image", it)
-                    }
-                }
+                val captureIntent: Intent = mediaManager.createScreenCaptureIntent()
+                startActivityForResult(captureIntent, Constant.TAG_ONE)
+//                if (mMediaProjection == null) {
+//                    val captureIntent: Intent = mediaManager.createScreenCaptureIntent()
+//                    startActivityForResult(captureIntent, Constant.TAG_ONE)
+//                } else {
+//                    mMediaProjection?.let {
+//                        CaptureImage().captureImages(this@MainActivity, "image", it)
+//                    }
+//                }
+//                MediaProjectionHelper.getInstance().startService(this@MainActivity)
             }
             R.id.rbVideo -> {
                 MediaProjectionHelper.getInstance().startService(this@MainActivity)
@@ -289,6 +294,18 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                 Constant.TAG_ONE -> {
                     mMediaProjection = data?.let { mediaManager.getMediaProjection(resultCode, it) }
                     mMediaProjection?.let { CaptureImage().captureImages(this, "image", it) }
+//                    MediaProjectionHelper.getInstance().createVirtualDisplay(requestCode, resultCode, data, true, true)
+//                    MediaProjectionHelper.getInstance().capture(object : ScreenCaptureCallback() {
+//                        override fun onSuccess(bitmap: Bitmap) {
+//                            super.onSuccess(bitmap)
+//                            saveBitmapToFile(bitmap, "ScreenCapture")
+//                        }
+//
+//                        override fun onFail() {
+//                            super.onFail()
+//                            LogUtil.e("ScreenCapture onFail","faile")
+//                        }
+//                    })
                 }
                 Constant.TAG_TWO -> {
 //                    mMediaProjection = data?.let { mediaManager.getMediaProjection(resultCode, it) }
@@ -315,6 +332,27 @@ class MainActivity : BaseActivity(), View.OnClickListener {
             }
         }
     }
+
+//    /**
+//     * 保存Bitmap到文件
+//     *
+//     * @param bitmap     bitmap
+//     * @param filePrefix 文件前缀名
+//     */
+//    private fun saveBitmapToFile(bitmap: Bitmap, filePrefix: String) {
+//        BitmapUtils.saveBitmapToFile(this, bitmap, filePrefix, object : SaveBitmapCallback() {
+//            override fun onSuccess(file: File) {
+//                super.onSuccess(file)
+//                "保存成功".showToast(this@MainActivity)
+//            }
+//
+//            override fun onFail(e: java.lang.Exception) {
+//                super.onFail(e)
+//                LogUtil.e("Save onError","faile")
+//                e.printStackTrace()
+//            }
+//        })
+//    }
 
     override fun onDestroy() {
         super.onDestroy()

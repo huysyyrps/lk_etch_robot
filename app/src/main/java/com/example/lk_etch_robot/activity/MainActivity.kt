@@ -4,8 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.hardware.display.DisplayManager
-import android.media.MediaRecorder
 import android.media.projection.MediaProjection
 import android.media.projection.MediaProjectionManager
 import android.os.Build
@@ -13,21 +11,25 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.example.lk_etch_robot.R
 import com.example.lk_etch_robot.dialog.MainDialog
+import com.example.lk_etch_robot.dialog.SaveDialogCallBack
 import com.example.lk_etch_robot.dialog.SettingDialogCallBack
 import com.example.lk_etch_robot.mediaprojection.CaptureImage
-import com.example.lk_etch_robot.mediaprojection.MyMediaRecorder
-import com.example.lk_etch_robot.mediaprojection.RecordVideo
 import com.example.lk_etch_robot.util.*
 import com.example.lk_etch_robot.util.BinaryChange.toBytes
+import com.mask.mediaprojection.interfaces.MediaRecorderCallback
+import com.mask.mediaprojection.utils.MediaProjectionHelper
 import com.skydroid.fpvlibrary.serial.SerialPortConnection
 import com.skydroid.fpvlibrary.serial.SerialPortControl
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import java.io.File
 import java.io.IOException
 import java.util.*
 import kotlin.concurrent.scheduleAtFixedRate
@@ -192,9 +194,9 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                         //当前抬升位置
                         var height = Integer.valueOf(stringData.substring(22, 24), 16)
                         CoroutineScope(Dispatchers.Main).launch {
-                            if(currentSupply==1){
+                            if (currentSupply == 1) {
                                 tvCurrentSupply.text = "主电源"
-                            }else if(currentSupply==0){
+                            } else if (currentSupply == 0) {
                                 tvCurrentSupply.text = "备用电源"
                             }
 
@@ -238,27 +240,18 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                 }
             }
             R.id.rbVideo -> {
-                mediaManager = getSystemService(MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
-                if (mMediaProjection == null) {
-                    //存在录屏授权的Activity
-                    val captureIntent: Intent = mediaManager.createScreenCaptureIntent()
-                    startActivityForResult(captureIntent, Constant.TAG_TWO)
-                } else {
-                    mMediaProjection?.let { RecordVideo().startRecord(mMediaProjection!!) }
-                    rbVideo.visibility = View.GONE
-                    rbVideoClose.visibility = View.VISIBLE
-                }
+                MediaProjectionHelper.getInstance().startService(this@MainActivity)
             }
             R.id.rbVideoClose -> {
-                RecordVideo().stopRecore()
+                MediaProjectionHelper.getInstance().stopMediaRecorder()
+                MediaProjectionHelper.getInstance().stopService(this)
                 rbVideo.visibility = View.VISIBLE
                 rbVideoClose.visibility = View.GONE
-                R.string.save_success.showToast(this)
             }
             R.id.rbSetting -> {
                 MainDialog().SettingDialog(this@MainActivity, protectElectQuantity, changeElectQuantity, protectCurrent,
                     object : SettingDialogCallBack {
-                        override fun callBack(protectElectQuantity: String, changeElectQuantity: String, protectCurrent: String, power:String) {
+                        override fun callBack(protectElectQuantity: String, changeElectQuantity: String, protectCurrent: String, power: String) {
                             if (mSerialPortConnection.isConnection) {
                                 var hexProtectElectQuantity = ""
                                 var hexChangeElectQuantity = ""
@@ -298,8 +291,24 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                     mMediaProjection?.let { CaptureImage().captureImages(this, "image", it) }
                 }
                 Constant.TAG_TWO -> {
-                    mMediaProjection = data?.let { mediaManager.getMediaProjection(resultCode, it) }
-                    mMediaProjection?.let { RecordVideo().startRecord(mMediaProjection!!) }
+//                    mMediaProjection = data?.let { mediaManager.getMediaProjection(resultCode, it) }
+//                    mMediaProjection?.let { RecordVideo().startRecord(mMediaProjection!!) }
+                    MediaProjectionHelper.getInstance().createVirtualDisplay(requestCode, resultCode, data, true, true)
+
+                    rbVideo.visibility = View.GONE
+                    rbVideoClose.visibility = View.VISIBLE
+                    MediaProjectionHelper.getInstance().startMediaRecorder(object : MediaRecorderCallback() {
+                        override fun onSuccess(message: String) {
+                            super.onSuccess(message)
+                            message.showToast(this@MainActivity)
+                        }
+
+                        override fun onFail() {
+                            super.onFail()
+                            LogUtil.e("MediaRecorder onFail", "faile")
+                        }
+                    })
+
                     rbVideo.visibility = View.GONE
                     rbVideoClose.visibility = View.VISIBLE
                 }

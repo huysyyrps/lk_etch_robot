@@ -7,4 +7,6 @@
     <string name="btn_cancel">取消</string>
     <string name="power_on">开机</string>
     <string name="power_off">关机</string>
+    <string name="content_media_recorder_result">屏幕录制成功，路径：%1$s</string>
+    <string name="aksd">qad &amp; ada</string>
 </resources>

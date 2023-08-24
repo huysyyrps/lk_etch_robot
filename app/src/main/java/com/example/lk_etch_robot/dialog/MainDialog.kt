@@ -2,17 +2,16 @@ package com.example.lk_etch_robot.dialog
 
 import android.annotation.SuppressLint
 import android.os.Build
-import android.text.Editable
-import android.text.InputFilter
-import android.text.TextWatcher
 import androidx.annotation.RequiresApi
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import com.example.lk_etch_robot.R
 import com.example.lk_etch_robot.activity.MainActivity
 import com.example.lk_etch_robot.util.showToast
-import com.example.lk_etch_robot.view.IPSectionFilter
+import kotlinx.android.synthetic.main.dialog_save_video.*
 import kotlinx.android.synthetic.main.dialog_setting.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class MainDialog {
@@ -97,5 +96,38 @@ class MainDialog {
             )
             dialog.dismiss()
         }
+    }
+
+
+    fun SaveVideo(
+        activity: MainActivity,
+        callBacl:SaveDialogCallBack
+    ) {
+        dialog = MaterialDialog(activity)
+            .cancelable(true)
+            .show {
+                customView(    //自定义弹窗
+                    viewRes = R.layout.dialog_save_video,//自定义文件
+                    dialogWrapContent = true,    //让自定义宽度生效
+                    scrollable = true,            //让自定义宽高生效
+                    noVerticalPadding = true    //让自定义高度生效
+                )
+                cornerRadius(16f)
+            }
+        dialog.btnSaveCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.btnSaveSure.setOnClickListener {
+            callBacl.callBack(getNowDate())
+            dialog.dismiss()
+        }
+    }
+
+    /**
+     * 获取当前时间,用来给文件夹命名
+     */
+    private fun getNowDate(): String {
+        val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US)
+        return format.format(Date()) + ".mp4"
     }
 }

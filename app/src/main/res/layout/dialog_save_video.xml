@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginBottom="0dp"
+        android:paddingLeft="10dp">
+
+    <include layout="@layout/dialog_item_header" />
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="0dp"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp"
+            android:paddingBottom="0dp">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+            <TextView
+                    style="@style/EditText"
+                    android:layout_height="85dp"
+                    android:layout_marginTop="0dp"
+                    android:text="视频文件以当前时间命名， 保存在”LuKe“-->”Video“文件夹下"
+                    android:gravity="top"
+                    android:paddingTop="5dp"
+                    android:paddingRight="8dp"
+                    android:lineHeight="35dp"
+                    android:layout_width="match_parent"/>
+
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="0dp"
+            android:orientation="horizontal">
+
+        <com.example.lk_etch_robot.view.BaseButton
+                android:id="@+id/btnSaveCancel"
+                style="@style/BaseButton"
+                android:layout_marginBottom="0dp"
+                android:layout_width="0dp"
+                android:layout_marginRight="20dp"
+                android:layout_weight="1"
+                android:text="@string/btn_cancel"
+                app:bg_color="@color/theme_color"
+                app:bg_corner="5dp" />
+
+        <com.example.lk_etch_robot.view.BaseButton
+                android:id="@+id/btnSaveSure"
+                style="@style/BaseButton"
+                android:layout_marginBottom="0dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:text="@string/btn_sure"
+                app:bg_color="@color/theme_color"
+                app:bg_corner="5dp" />
+    </LinearLayout>
+</LinearLayout>

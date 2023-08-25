@@ -22,8 +22,7 @@ import com.example.lk_etch_robot.util.LogUtil
     var paintPowerHeader = Paint()
     var paintText = Paint()
 
-    fun HeightView(percent: Int) {
-        this.percent = percent
+    fun HeightView() {
         paintFill.isAntiAlias = true//是否抗锯齿
         paintFill.style = Paint.Style.FILL// 描边填充效果 1.STROKE 描边 2.FIll 填充 3.FILL_AND_STROKE 描边+填充
 
@@ -66,17 +65,16 @@ import com.example.lk_etch_robot.util.LogUtil
         val top = dip2px(0.5f).toFloat()
         val right = dip2px(2.5f).toFloat()
         val bottom = dip2px(0.5f).toFloat()
-        LogUtil.e("TAG","$a----$b----$left----$top----$right----$bottom----$percent----${b*percent/100}")
         val textRectF = RectF(10.0f, 9.4f, a.toFloat()-27, b.toFloat()*(100-percent)/100)
         val powerBodyRectF = RectF(10.0f, 10.0f, a.toFloat()-27, (b.toFloat()-10))
         canvas.drawRoundRect(powerBodyRectF, 18.0f, 18.0f, paintPowerBody)
         canvas.drawRoundRect(textRectF,18.0f, 18.0f, paintFill)
-        canvas.drawText(percent.toString(), 100F, 100F, paintText)
+//        canvas.drawText(percent.toString(), 100F, 100F, paintText)
     }
 
     @Synchronized
     fun setHeight(percent: Int) {
-//        this.percent = percent
+        this.percent = percent
         postInvalidate()
     }
 }

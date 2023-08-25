@@ -49,6 +49,8 @@ class MainActivity : BaseActivity(), View.OnClickListener {
     val timer = Timer()
     private lateinit var mediaManager: MediaProjectionManager
     private var mMediaProjection: MediaProjection? = null
+    var startTime = 0L
+    var sendState = true
 
     //保护电量
     var protectElectQuantity = 0
@@ -73,8 +75,6 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         fPVVideoView.init()
         initVideo()
         initData()
-        heightView.HeightView(30)
-        heightView.height = 30
     }
 
     /**
@@ -208,7 +208,9 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                             }else if (lightState==1){
                                 tvLightState.text = "开启"
                             }
-                            heightView.HeightView(height)
+                            heightView.HeightView()
+                            heightView.setHeight(height)
+                            tvHeight.text = "抬升高度$height"
                         }
                     }
                 }
@@ -246,21 +248,52 @@ class MainActivity : BaseActivity(), View.OnClickListener {
             R.id.rbSetting -> {
                 MainDialog().SettingDialog(this@MainActivity, protectElectQuantity, changeElectQuantity, protectCurrent,
                     object : SettingDialogCallBack {
-                        override fun callBack(protectElectQuantity: String, changeElectQuantity: String, protectCurrent: String, power: String) {
+                        override fun callBack(protectElectQuantityBack: String, changeElectQuantityBack: String, protectCurrentBack: String, power: String) {
+                            sendState = true
                             if (mSerialPortConnection.isConnection) {
                                 var hexProtectElectQuantity = ""
                                 var hexChangeElectQuantity = ""
                                 var hexProtectCurrent = ""
-                                hexProtectElectQuantity = Integer.toHexString(protectElectQuantity.toInt())
-                                hexChangeElectQuantity = Integer.toHexString(changeElectQuantity.toInt())
-                                hexProtectCurrent = BinaryChange.singleToHex(protectCurrent.toFloat()).toString()
+                                hexProtectElectQuantity = Integer.toHexString(protectElectQuantityBack.toInt())
+                                hexChangeElectQuantity = Integer.toHexString(changeElectQuantityBack.toInt())
+                                hexProtectCurrent = BinaryChange.singleToHex(protectCurrentBack.toFloat()).toString()
                                 var data = "A10303$hexProtectElectQuantity$hexChangeElectQuantity$hexProtectCurrent$power"
                                 data = "$data${ByteDataChange.HexStringToBytes(data)}"
                                 var arrayData = toBytes(data)
                                 mServiceConnection.sendData(
                                     arrayData
                                 )
+                                startTime = System.currentTimeMillis()
                             }
+                            while (sendState){
+                                if (System.currentTimeMillis()-startTime>=1000L) {
+                                    if (protectElectQuantity.toString() == protectElectQuantityBack
+                                        && changeElectQuantity.toString() == changeElectQuantityBack
+                                        && protectCurrent.toString() == protectCurrentBack
+                                    ) {
+                                        LogUtil.e("TAG", "设置正确")
+                                        sendState = false
+                                    } else {
+                                        LogUtil.e("TAG", "设置错误重新发起")
+                                        if (mSerialPortConnection.isConnection) {
+                                            var hexProtectElectQuantity = ""
+                                            var hexChangeElectQuantity = ""
+                                            var hexProtectCurrent = ""
+                                            hexProtectElectQuantity = Integer.toHexString(protectElectQuantityBack.toInt())
+                                            hexChangeElectQuantity = Integer.toHexString(changeElectQuantityBack.toInt())
+                                            hexProtectCurrent = BinaryChange.singleToHex(protectCurrentBack.toFloat()).toString()
+                                            var data = "A10303$hexProtectElectQuantity$hexChangeElectQuantity$hexProtectCurrent$power"
+                                            data = "$data${ByteDataChange.HexStringToBytes(data)}"
+                                            var arrayData = toBytes(data)
+                                            mServiceConnection.sendData(
+                                                arrayData
+                                            )
+                                            startTime = System.currentTimeMillis()
+                                        }
+                                    }
+                                }
+                            }
+
                         }
                     })
             }

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
 import android.media.projection.MediaProjection
 import android.media.projection.MediaProjectionManager
 import android.os.Build
@@ -12,7 +11,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.example.lk_etch_robot.R
 import com.example.lk_etch_robot.dialog.MainDialog
@@ -21,17 +19,13 @@ import com.example.lk_etch_robot.mediaprojection.CaptureImage
 import com.example.lk_etch_robot.util.*
 import com.example.lk_etch_robot.util.BinaryChange.toBytes
 import com.mask.mediaprojection.interfaces.MediaRecorderCallback
-import com.mask.mediaprojection.interfaces.ScreenCaptureCallback
 import com.mask.mediaprojection.utils.MediaProjectionHelper
-import com.mask.photo.interfaces.SaveBitmapCallback
-import com.mask.photo.utils.BitmapUtils
 import com.skydroid.fpvlibrary.serial.SerialPortConnection
 import com.skydroid.fpvlibrary.serial.SerialPortControl
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.io.File
 import java.io.IOException
 import java.util.*
 import kotlin.concurrent.scheduleAtFixedRate
@@ -79,6 +73,8 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         fPVVideoView.init()
         initVideo()
         initData()
+        heightView.HeightView(30)
+        heightView.height = 30
     }
 
     /**
@@ -153,14 +149,14 @@ class MainActivity : BaseActivity(), View.OnClickListener {
 //                LogUtil.e("TAG", stringData)
                 //在设备上电后1S周期向遥控器接收端发送包含遥控器通讯帧率的数据包
                 if (stringData.startsWith("B101") && stringData.length == 10) {
-//                    if (ByteDataChange.HexStringToBytes(stringData.substring(0, 8)) == stringData.subSequence(8, 10)) {
-                    var s = ByteArray(4)
-                    s[0] = 0xA1.toByte()
-                    s[1] = 0x01
-                    s[2] = 0x01
-                    s[3] = 0xA3.toByte()
-                    mServiceConnection.sendData(s)
-//                    }
+                    if (ByteDataChange.HexStringToBytes(stringData.substring(0, 8)) == stringData.subSequence(8, 10)) {
+                        var s = ByteArray(4)
+                        s[0] = 0xA1.toByte()
+                        s[1] = 0x01
+                        s[2] = 0x01
+                        s[3] = 0xA3.toByte()
+                        mServiceConnection.sendData(s)
+                    }
                 }
                 if (stringData.startsWith("B103") && stringData.length == 22) {
                     if (ByteDataChange.HexStringToBytes(stringData.substring(0, 20)) == stringData.subSequence(20, 22)) {
@@ -202,14 +198,17 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                                 tvCurrentSupply.text = "备用电源"
                             }
 
-                            tvMainElectQuantity.text = "$mainElectQuantity"
-                            tvElectQuantity.text = "$electQuantity"
+                            bvMainElectQuantity.BatteryView()
+                            bvElectQuantity.BatteryView()
+                            bvMainElectQuantity.setProgress(mainElectQuantity.toInt())
+                            bvElectQuantity.setProgress(electQuantity.toInt())
                             tvCurrent.text = "$current"
-                            tvLightState.text = "$lightState"
-//                            tvHeight.text = "$height"
-                            bv_battery.BatteryView()
-                            bv_battery.setProgress(height.toInt())
-//                            bv_battery.setProgress(30)
+                            if (lightState==0){
+                                tvLightState.text = "关闭"
+                            }else if (lightState==1){
+                                tvLightState.text = "开启"
+                            }
+                            heightView.HeightView(height)
                         }
                     }
                 }
@@ -234,15 +233,6 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                 mediaManager = getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
                 val captureIntent: Intent = mediaManager.createScreenCaptureIntent()
                 startActivityForResult(captureIntent, Constant.TAG_ONE)
-//                if (mMediaProjection == null) {
-//                    val captureIntent: Intent = mediaManager.createScreenCaptureIntent()
-//                    startActivityForResult(captureIntent, Constant.TAG_ONE)
-//                } else {
-//                    mMediaProjection?.let {
-//                        CaptureImage().captureImages(this@MainActivity, "image", it)
-//                    }
-//                }
-//                MediaProjectionHelper.getInstance().startService(this@MainActivity)
             }
             R.id.rbVideo -> {
                 MediaProjectionHelper.getInstance().startService(this@MainActivity)
@@ -294,22 +284,8 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                 Constant.TAG_ONE -> {
                     mMediaProjection = data?.let { mediaManager.getMediaProjection(resultCode, it) }
                     mMediaProjection?.let { CaptureImage().captureImages(this, "image", it) }
-//                    MediaProjectionHelper.getInstance().createVirtualDisplay(requestCode, resultCode, data, true, true)
-//                    MediaProjectionHelper.getInstance().capture(object : ScreenCaptureCallback() {
-//                        override fun onSuccess(bitmap: Bitmap) {
-//                            super.onSuccess(bitmap)
-//                            saveBitmapToFile(bitmap, "ScreenCapture")
-//                        }
-//
-//                        override fun onFail() {
-//                            super.onFail()
-//                            LogUtil.e("ScreenCapture onFail","faile")
-//                        }
-//                    })
                 }
                 Constant.TAG_TWO -> {
-//                    mMediaProjection = data?.let { mediaManager.getMediaProjection(resultCode, it) }
-//                    mMediaProjection?.let { RecordVideo().startRecord(mMediaProjection!!) }
                     MediaProjectionHelper.getInstance().createVirtualDisplay(requestCode, resultCode, data, true, true)
 
                     rbVideo.visibility = View.GONE
@@ -332,27 +308,6 @@ class MainActivity : BaseActivity(), View.OnClickListener {
             }
         }
     }
-
-//    /**
-//     * 保存Bitmap到文件
-//     *
-//     * @param bitmap     bitmap
-//     * @param filePrefix 文件前缀名
-//     */
-//    private fun saveBitmapToFile(bitmap: Bitmap, filePrefix: String) {
-//        BitmapUtils.saveBitmapToFile(this, bitmap, filePrefix, object : SaveBitmapCallback() {
-//            override fun onSuccess(file: File) {
-//                super.onSuccess(file)
-//                "保存成功".showToast(this@MainActivity)
-//            }
-//
-//            override fun onFail(e: java.lang.Exception) {
-//                super.onFail(e)
-//                LogUtil.e("Save onError","faile")
-//                e.printStackTrace()
-//            }
-//        })
-//    }
 
     override fun onDestroy() {
         super.onDestroy()

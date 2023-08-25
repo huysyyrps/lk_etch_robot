@@ -9,26 +9,28 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.core.internal.view.SupportMenu
 import com.example.lk_etch_robot.R
+import com.example.lk_etch_robot.util.LogUtil
 
 
 /**
- * 电量显示
+ * 抬升高度
  */
- class BatteryView constructor(context: Context?, attrs: AttributeSet? = null) : View(context, attrs) {
+ class HeightView constructor(context: Context?, attrs: AttributeSet? = null) : View(context, attrs) {
     private var percent = 0
     var paintFill = Paint()
     var paintPowerBody = Paint()
     var paintPowerHeader = Paint()
     var paintText = Paint()
 
-    fun BatteryView() {
+    fun HeightView(percent: Int) {
+        this.percent = percent
         paintFill.isAntiAlias = true//是否抗锯齿
         paintFill.style = Paint.Style.FILL// 描边填充效果 1.STROKE 描边 2.FIll 填充 3.FILL_AND_STROKE 描边+填充
 
         paintPowerBody.isAntiAlias = true
-        paintPowerBody.style = Paint.Style.STROKE
+        paintPowerBody.style = Paint.Style.FILL
         paintPowerBody.strokeWidth = dip2px(1.0f).toFloat()
-        paintPowerBody.color = resources.getColor(R.color.theme_color)
+        paintPowerBody.color = resources.getColor(R.color.red)
 
         paintPowerHeader.isAntiAlias = true
         paintPowerHeader.style = Paint.Style.FILL
@@ -36,13 +38,13 @@ import com.example.lk_etch_robot.R
 
         paintText.isAntiAlias = true
         paintText.style = Paint.Style.FILL
-        paintText.color = resources.getColor(R.color.holo_orange_light)
+        paintText.color = resources.getColor(R.color.white)
 
         val dm = resources.displayMetrics
         val mScreenWidth = dm.widthPixels
         val mScreenHeight = dm.heightPixels
-        val ratioWidth = mScreenWidth / 720.0f
-        val ratioHeight = mScreenHeight / 1080.0f
+        val ratioWidth = 60F
+        val ratioHeight = mScreenHeight-100F
         val ratioMetrics = Math.min(ratioWidth, ratioHeight)
         val textSize = Math.round(25.0f * ratioMetrics)
         paintText.textSize = textSize.toFloat()
@@ -56,29 +58,25 @@ import com.example.lk_etch_robot.R
     // android.view.View
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        if (percent > 20) {
-            paintFill.color = resources.getColor(R.color.holo_blue_light)
-        } else {
-            paintFill.color = resources.getColor(R.color.red)
-        }
+        paintFill.color = resources.getColor(R.color.theme_color)
+        paintPowerBody.color = resources.getColor(R.color.red)
         val a = width - dip2px(2.0f)
         val b = height - dip2px(3.0f)
         val left = dip2px(0.5f).toFloat()
         val top = dip2px(0.5f).toFloat()
         val right = dip2px(2.5f).toFloat()
         val bottom = dip2px(0.5f).toFloat()
-        val textRectF = RectF(left, top, (a - right)/100*percent, b.toFloat())
-        val powerBodyRectF = RectF(0.0f, 0.0f, a - right, b.toFloat())
-        val powerHeaderRectF = RectF(a - right, (b / 5).toFloat(), a.toFloat(), b + bottom - b / 5)
-        canvas.drawRect(textRectF, paintFill)
-        canvas.drawRoundRect(powerBodyRectF, 8.0f, 8.0f, paintPowerBody)
-        canvas.drawRect(powerHeaderRectF, paintPowerHeader)
-        canvas.drawText(percent .toString(), (width / 2 - dip2px(4.5f)).toFloat(), (height - height * 2.3 / 5.5).toFloat(), paintText)
+        LogUtil.e("TAG","$a----$b----$left----$top----$right----$bottom----$percent----${b*percent/100}")
+        val textRectF = RectF(10.0f, 9.4f, a.toFloat()-27, b.toFloat()*(100-percent)/100)
+        val powerBodyRectF = RectF(10.0f, 10.0f, a.toFloat()-27, (b.toFloat()-10))
+        canvas.drawRoundRect(powerBodyRectF, 18.0f, 18.0f, paintPowerBody)
+        canvas.drawRoundRect(textRectF,18.0f, 18.0f, paintFill)
+        canvas.drawText(percent.toString(), 100F, 100F, paintText)
     }
 
     @Synchronized
-    fun setProgress(percent: Int) {
-        this.percent = percent
+    fun setHeight(percent: Int) {
+//        this.percent = percent
         postInvalidate()
     }
 }

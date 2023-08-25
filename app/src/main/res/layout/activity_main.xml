@@ -49,50 +49,7 @@
                         android:textSize="11dp"
                         android:textColor="@color/red"/>
             </LinearLayout>
-            <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="1.1"
-                    android:layout_height="30dp"
-                    android:orientation="horizontal">
 
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="主电源电量："
-                        android:textSize="11dp"
-                        android:textColor="@color/red"/>
-
-                <TextView
-                        android:id="@+id/tvMainElectQuantity"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:textSize="11dp"
-                        android:textColor="@color/red"/>
-            </LinearLayout>
-            <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="1.1"
-                    android:layout_height="30dp"
-                    android:orientation="horizontal">
-
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="备用电源电量："
-                        android:textSize="11dp"
-                        android:textColor="@color/red"/>
-
-                <TextView
-                        android:id="@+id/tvElectQuantity"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:textSize="11dp"
-                        android:textColor="@color/red"/>
-            </LinearLayout>
             <LinearLayout
                     android:layout_width="0dp"
                     android:layout_weight="1"
@@ -141,7 +98,7 @@
 
             <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_weight="1"
+                    android:layout_weight="1.1"
                     android:layout_height="30dp"
                     android:orientation="horizontal">
 
@@ -149,26 +106,64 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="抬升位置："
+                        android:text="主电源电量："
                         android:textSize="11dp"
                         android:textColor="@color/red"/>
+
+
                 <com.example.lk_etch_robot.view.BatteryView
-                        android:id="@+id/bv_battery"
+                        android:id="@+id/bvMainElectQuantity"
                         android:layout_width="35dp"
                         android:layout_height="15dp"
                         android:layout_marginTop="2dp"
                         android:layout_gravity="center"/>
-<!--                <TextView-->
-<!--                        android:id="@+id/tvHeight"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="match_parent"-->
-<!--                        android:gravity="center"-->
-<!--                        android:textSize="11dp"-->
-<!--                        android:textColor="@color/red"/>-->
             </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1.1"
+                    android:layout_height="30dp"
+                    android:orientation="horizontal">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="备用电源电量："
+                        android:textSize="11dp"
+                        android:textColor="@color/red"/>
+                <com.example.lk_etch_robot.view.BatteryView
+                        android:id="@+id/bvElectQuantity"
+                        android:layout_width="35dp"
+                        android:layout_height="15dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_gravity="center"/>
+            </LinearLayout>
+
         </LinearLayout>
     </FrameLayout>
 
+
+    <com.example.lk_etch_robot.view.HeightView
+            android:id="@+id/heightView"
+            android:layout_width="25dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="30dp"
+            android:layout_gravity="left"/>
+
+    <TextView
+            android:id="@+id/tvHeight"
+            android:layout_width="15dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="80dp"
+            android:layout_marginBottom="50dp"
+            android:layout_gravity="left"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:ems="1"
+            android:text="抬升高度30"
+            android:textSize="10dp"
+            android:layout_marginLeft="1dp"/>
     <RadioGroup
             android:id="@+id/radioGroup"
             android:layout_width="40dp"

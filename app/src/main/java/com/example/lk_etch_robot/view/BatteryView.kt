@@ -16,6 +16,7 @@ import com.example.lk_etch_robot.R
  */
  class BatteryView constructor(context: Context?, attrs: AttributeSet? = null) : View(context, attrs) {
     private var percent = 0
+    private var protectElectQuantity = 0
     var paintFill = Paint()
     var paintPowerBody = Paint()
     var paintPowerHeader = Paint()
@@ -56,7 +57,7 @@ import com.example.lk_etch_robot.R
     // android.view.View
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        if (percent > 20) {
+        if (percent > protectElectQuantity) {
             paintFill.color = resources.getColor(R.color.holo_blue_light)
         } else {
             paintFill.color = resources.getColor(R.color.red)
@@ -77,8 +78,9 @@ import com.example.lk_etch_robot.R
     }
 
     @Synchronized
-    fun setProgress(percent: Int) {
+    fun setProgress(percent: Int, protectElectQuantity: Int) {
         this.percent = percent
+        this.protectElectQuantity = protectElectQuantity
         postInvalidate()
     }
 }

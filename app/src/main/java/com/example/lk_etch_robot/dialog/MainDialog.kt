@@ -62,7 +62,6 @@ class MainDialog {
                 return@setOnClickListener
             }
 
-
             if (dialog.etProtectElectQuantity.text.toString().toInt()<20||dialog.etProtectElectQuantity.text.toString().toInt()>90) {
                 "保护电量范围20~90".showToast(activity)
                 return@setOnClickListener
@@ -71,12 +70,10 @@ class MainDialog {
                 "强制切换备用电源电量范围10~${dialog.etProtectElectQuantity.text}".showToast(activity)
                 return@setOnClickListener
             }
-
             if (dialog.etProtectCurrent.text.toString().toFloat()<2.0|| dialog.etProtectCurrent.text.toString().toFloat()>6.0) {
                 "保护电流范围2.0~6.0".showToast(activity)
                 return@setOnClickListener
             }
-
 
             var power = "00"
             when (dialog.tabLayout.selectedTabPosition) {

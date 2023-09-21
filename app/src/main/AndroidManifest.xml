@@ -29,6 +29,8 @@
             tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
 
 
     <application
@@ -40,6 +42,11 @@
             android:supportsRtl="true"
             android:requestLegacyExternalStorage="true"
             android:theme="@style/NoAction">
+
+        <service android:name=".util.FloatingWindowGFG"
+                tools:ignore="Instantiatable"/>
+        <service android:name=".util.FloatingWindow"
+                tools:ignore="Instantiatable"/>
 
         <activity
                 android:name=".activity.MainActivity"

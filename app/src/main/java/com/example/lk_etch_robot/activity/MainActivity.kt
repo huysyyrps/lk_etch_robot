@@ -2,14 +2,15 @@ package com.example.lk_etch_robot.activity
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.media.projection.MediaProjection
 import android.media.projection.MediaProjectionManager
-import android.os.Build
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.net.Uri
+import android.os.*
+import android.provider.Settings
 import android.view.View
 import androidx.annotation.RequiresApi
 import com.example.lk_etch_robot.R
@@ -27,22 +28,23 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.IOException
+import java.text.DecimalFormat
 import java.util.*
 import kotlin.concurrent.scheduleAtFixedRate
 
 
 class MainActivity : BaseActivity(), View.OnClickListener {
     //视频渲染
-    private lateinit var mFPVVideoClient: FPVVideoClient
+    private var mFPVVideoClient: FPVVideoClient? = null
 
     //usb连接实例
-    private lateinit var mSerialPortConnection: SerialPortConnection
+    private var mSerialPortConnection: SerialPortConnection? = null
 
     //FPV控制
     private lateinit var mSerialPortControl: SerialPortControl
 
     //硬件串口连接实例（数传）
-    private lateinit var mServiceConnection: SerialPortConnection
+    private var mServiceConnection: SerialPortConnection? = null
     private val mainHanlder = Handler(Looper.getMainLooper())
     private var isSetTime = false
     private var exitTime: Long = 0
@@ -72,9 +74,29 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         rbSetting.setOnClickListener(this)
         rbBack.setOnClickListener(this)
 
-        fPVVideoView.init()
-        initVideo()
-        initData()
+//        fPVVideoView.init()
+//        initVideo()
+//        initData()
+
+        if (checkOverlayDisplayPermission()) {
+//            startService(Intent(this@MainActivity, FloatingWindowGFG::class.java))
+            startService(Intent(this@MainActivity, FloatingWindow::class.java))
+            finish()
+        }else{
+            var intent = Intent()
+            intent.action = Settings.ACTION_MANAGE_OVERLAY_PERMISSION;
+            startActivity(intent);
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun checkOverlayDisplayPermission(): Boolean {
+        var  s1 = Settings.canDrawOverlays(this)
+        return if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+            Settings.canDrawOverlays(this)
+        } else {
+            true
+        }
     }
 
     /**
@@ -87,28 +109,28 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         mSerialPortConnection = SerialPortConnection.newBuilder("/dev/ttyHS0", 4000000)
             .flags(1 shl 13)
             .build()
-        mSerialPortConnection.setDelegate(object : SerialPortConnection.Delegate {
+        mSerialPortConnection?.setDelegate(object : SerialPortConnection.Delegate {
             override fun received(bytes: ByteArray, size: Int) {
                 if (mFPVVideoClient != null) {
-                    mFPVVideoClient.received(bytes, size)
+                    mFPVVideoClient?.received(bytes, size)
                 }
             }
 
             override fun connect() {
                 if (mFPVVideoClient != null) {
-                    mFPVVideoClient.startPlayback()
+                    mFPVVideoClient?.startPlayback()
                 }
             }
         })
         try {
             //打开串口
-            mSerialPortConnection.openConnection()
+            mSerialPortConnection?.openConnection()
             LogUtil.e("TAG", "连接成功")
         } catch (e: Exception) {
             e.printStackTrace()
         }
         mSerialPortControl = SerialPortControl(mSerialPortConnection)
-        mFPVVideoClient.setDelegate(object : FPVVideoClient.Delegate {
+        mFPVVideoClient?.setDelegate(object : FPVVideoClient.Delegate {
             override fun onStopRecordListener(fileName: String) {
                 //停止录像回调
             }
@@ -135,6 +157,9 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                 fPVVideoView.resetView(mainHanlder)
             }
         })
+
+        var address = getIp().connectIp
+        LogUtil.e("TAG","${address}")
     }
 
     /**s
@@ -143,7 +168,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
     private fun initData() {
         //硬件串口实例
         mServiceConnection = SerialPortConnection.newBuilder("/dev/ttyHS1", 921600).flags(1 shl 13).build()
-        mServiceConnection.setDelegate(object : SerialPortConnection.Delegate {
+        mServiceConnection?.setDelegate(object : SerialPortConnection.Delegate {
             override fun received(bytes: ByteArray, size: Int) {
                 var stringData = ByteDataChange.ByteToString(bytes)
 //                LogUtil.e("TAG", stringData)
@@ -155,7 +180,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                         s[1] = 0x01
                         s[2] = 0x01
                         s[3] = 0xA3.toByte()
-                        mServiceConnection.sendData(s)
+                        mServiceConnection?.sendData(s)
                     }
                 }
                 if (stringData.startsWith("B103") && stringData.length == 22) {
@@ -173,7 +198,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                             s[1] = 0x02
                             s[2] = 0x07
                             s[3] = 0xAA.toByte()
-                            mServiceConnection.sendData(s)
+                            mServiceConnection?.sendData(s)
                         }
                     }
                 }
@@ -187,6 +212,12 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                         var electQuantity = Integer.valueOf(stringData.substring(10, 12), 16)
                         //当前工作电流
                         var current = java.lang.Float.intBitsToFloat(Integer.valueOf(stringData.substring(12, 20), 16))
+                        if (current<0){
+                            current=0.0F
+                        }
+                        val df = DecimalFormat("0.00")
+
+                        var currentFormat = df.format(current)
                         //当前照明状态
                         var lightState = Integer.valueOf(stringData.substring(20, 22), 16)
                         //当前抬升位置
@@ -202,7 +233,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                             bvElectQuantity.BatteryView()
                             bvMainElectQuantity.setProgress(mainElectQuantity.toInt(),protectElectQuantity)
                             bvElectQuantity.setProgress(electQuantity.toInt(),protectElectQuantity)
-                            tvCurrent.text = "$current"
+                            tvCurrent.text = "$currentFormat"
                             if (lightState==0){
                                 tvLightState.text = "关闭"
                             }else if (lightState==1){
@@ -222,7 +253,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         })
         try {
             //打开串口
-            mServiceConnection.openConnection()
+            mServiceConnection?.openConnection()
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
         }
@@ -250,7 +281,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                     object : SettingDialogCallBack {
                         override fun callBack(protectElectQuantityBack: String, changeElectQuantityBack: String, protectCurrentBack: String, power: String) {
                             sendState = true
-                            if (mSerialPortConnection.isConnection) {
+                            if (mSerialPortConnection?.isConnection == true) {
                                 var hexProtectElectQuantity = ""
                                 var hexChangeElectQuantity = ""
                                 var hexProtectCurrent = ""
@@ -260,7 +291,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                                 var data = "A10303$hexProtectElectQuantity$hexChangeElectQuantity$hexProtectCurrent$power"
                                 data = "$data${ByteDataChange.HexStringToBytes(data)}"
                                 var arrayData = toBytes(data)
-                                mServiceConnection.sendData(
+                                mServiceConnection?.sendData(
                                     arrayData
                                 )
                                 startTime = System.currentTimeMillis()
@@ -271,13 +302,13 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                                     if (System.currentTimeMillis()-startTime>=1000L) {
                                         if (protectElectQuantity.toString() == protectElectQuantityBack
                                             && changeElectQuantity.toString() == changeElectQuantityBack
-                                            && protectCurrent.toString() == protectCurrentBack
+                                            && protectCurrent.toString() == protectCurrentBack.toFloat().toString()
                                         ) {
                                             LogUtil.e("TAG", "设置正确")
                                             sendState = false
                                         } else {
                                             LogUtil.e("TAG", "设置错误重新发起")
-                                            if (mSerialPortConnection.isConnection) {
+                                            if (mSerialPortConnection?.isConnection == true) {
                                                 var hexProtectElectQuantity = ""
                                                 var hexChangeElectQuantity = ""
                                                 var hexProtectCurrent = ""
@@ -287,7 +318,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                                                 var data = "A10303$hexProtectElectQuantity$hexChangeElectQuantity$hexProtectCurrent$power"
                                                 data = "$data${ByteDataChange.HexStringToBytes(data)}"
                                                 var arrayData = toBytes(data)
-                                                mServiceConnection.sendData(
+                                                mServiceConnection?.sendData(
                                                     arrayData
                                                 )
                                                 startTime = System.currentTimeMillis()
@@ -350,17 +381,17 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         super.onDestroy()
         if (mSerialPortConnection != null) {
             try {
-                mSerialPortConnection.closeConnection()
+                mSerialPortConnection?.closeConnection()
             } catch (e: IOException) {
                 e.printStackTrace()
             }
         }
         if (mFPVVideoClient != null) {
-            mFPVVideoClient.stopPlayback()
+            mFPVVideoClient?.stopPlayback()
         }
         if (mServiceConnection != null) {
             try {
-                mServiceConnection.closeConnection()
+                mServiceConnection?.closeConnection()
             } catch (e: IOException) {
                 e.printStackTrace()
             }

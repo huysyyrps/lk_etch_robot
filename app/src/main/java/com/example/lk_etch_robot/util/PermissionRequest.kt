@@ -21,6 +21,7 @@ object PermissionRequest {
         requestList.add(Manifest.permission.RECORD_AUDIO)
         requestList.add(Manifest.permission.ACCESS_WIFI_STATE)
         requestList.add(Manifest.permission.CAMERA)
+        requestList.add(Manifest.permission.SYSTEM_ALERT_WINDOW)
         if (requestList.isNotEmpty()) {
             PermissionX.init(activity)
                 .permissions(requestList)

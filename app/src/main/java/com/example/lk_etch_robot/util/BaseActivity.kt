@@ -15,13 +15,15 @@ open class BaseActivity : AppCompatActivity() {
         Log.d("BaseActivity", javaClass.simpleName)
         ActivityCollector.addActivity(this)
         hideStatusBar()
-        hideBottomUIMenu()
+//        hideBottomUIMenu()
     }
 
     override fun onResume() {
         super.onResume()
-        hideBottomUIMenu()
+//        hideStatusBar()
+//        hideBottomUIMenu()
     }
+
     /**
      * 隐藏状态栏
      */

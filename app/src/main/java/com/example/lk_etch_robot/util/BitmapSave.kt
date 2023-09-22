@@ -26,8 +26,8 @@ object BitmapSave {
     ) :Boolean{
         try {
 //            getExternalStorageDirectory
-//            val dir = context.externalCacheDir.toString()+ "/" + local + "/" //图片保存的文件夹名
-            val dir = Environment.getExternalStorageDirectory ().absolutePath + "/" + local + "/" //图片保存的文件夹名
+            val dir = context.externalCacheDir.toString()+ "/" + local + "/" //图片保存的文件夹名
+//            val dir = Environment.getExternalStorageDirectory ().absolutePath + "/" + local + "/" //图片保存的文件夹名
             val file = File(dir)
             //如果不存在  就mkdirs()创建此文件夹
             if (!file.exists()) {

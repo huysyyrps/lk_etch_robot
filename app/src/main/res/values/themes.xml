@@ -14,6 +14,7 @@
         <!-- Customize your theme here. -->
     </style>
     <style name="NoAction" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:navigationBarColor">@color/theme_back_color</item>
+<!--        <item name="android:navigationBarColor">@color/theme_back_color</item>-->
+        <item name="android:navigationBarColor">@color/black</item>
     </style>
 </resources>

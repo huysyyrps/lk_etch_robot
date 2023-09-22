@@ -48,6 +48,9 @@
         <service android:name=".util.FloatingWindow"
                 tools:ignore="Instantiatable"/>
 
+        <activity android:name=".activity.ImageListActivity"/>
+        <activity android:name=".activity.VideoListActivity"/>
+
         <activity
                 android:name=".activity.MainActivity"
                 android:exported="true">

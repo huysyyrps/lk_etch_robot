@@ -9,4 +9,8 @@
     <string name="power_off">关机</string>
     <string name="content_media_recorder_result">屏幕录制成功，路径：%1$s</string>
     <string name="aksd">qad &amp; ada</string>
+    <string name="image_list">图片列表</string>
+    <string name="video_list">视频列表</string>
+    <string name="no_data">暂无数据</string>
+    <string name="remove_sure">您确定要删除此项数据吗？</string>
 </resources>

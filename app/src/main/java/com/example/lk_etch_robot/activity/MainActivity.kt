@@ -2,6 +2,7 @@ package com.example.lk_etch_robot.activity
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.ActivityManager
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
@@ -9,18 +10,20 @@ import android.content.Intent
 import android.media.projection.MediaProjection
 import android.media.projection.MediaProjectionManager
 import android.net.Uri
-import android.os.*
+import android.os.Build
+import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
+import android.view.KeyEvent
 import android.view.View
 import androidx.annotation.RequiresApi
 import com.example.lk_etch_robot.R
 import com.example.lk_etch_robot.dialog.MainDialog
 import com.example.lk_etch_robot.dialog.SettingDialogCallBack
-import com.example.lk_etch_robot.mediaprojection.CaptureImage
 import com.example.lk_etch_robot.util.*
 import com.example.lk_etch_robot.util.BinaryChange.toBytes
-import com.mask.mediaprojection.interfaces.MediaRecorderCallback
-import com.mask.mediaprojection.utils.MediaProjectionHelper
+import com.example.lk_etch_robot.util.mediaprojection.MediaUtil
 import com.skydroid.fpvlibrary.serial.SerialPortConnection
 import com.skydroid.fpvlibrary.serial.SerialPortControl
 import kotlinx.android.synthetic.main.activity_main.*
@@ -31,6 +34,7 @@ import java.io.IOException
 import java.text.DecimalFormat
 import java.util.*
 import kotlin.concurrent.scheduleAtFixedRate
+import kotlin.system.exitProcess
 
 
 class MainActivity : BaseActivity(), View.OnClickListener {
@@ -42,7 +46,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
 
     //FPV控制
     private lateinit var mSerialPortControl: SerialPortControl
-
+    private var dialog: AlertDialog? = null
     //硬件串口连接实例（数传）
     private var mServiceConnection: SerialPortConnection? = null
     private val mainHanlder = Handler(Looper.getMainLooper())
@@ -53,15 +57,26 @@ class MainActivity : BaseActivity(), View.OnClickListener {
     private var mMediaProjection: MediaProjection? = null
     var startTime = 0L
     var sendState = true
-
     //保护电量
     var protectElectQuantity = 0
-
     //强制切换备用电源电量
     var changeElectQuantity = 0
-
     //保护电流
     var protectCurrent = 0.0F
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.action === KeyEvent.ACTION_DOWN) {
+            if (System.currentTimeMillis() - exitTime > 2000) {
+                "再按一次退出程序".showToast(this)
+                exitTime = System.currentTimeMillis()
+            } else {
+                finish()
+                exitProcess(0)
+            }
+            return true
+        }
+        return super.onKeyDown(keyCode, event)
+    }
 
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,25 +88,59 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         rbVideoClose.setOnClickListener(this)
         rbSetting.setOnClickListener(this)
         rbBack.setOnClickListener(this)
+        rbAlbum.setOnClickListener(this)
 
-//        fPVVideoView.init()
-//        initVideo()
-//        initData()
-
-        if (checkOverlayDisplayPermission()) {
-//            startService(Intent(this@MainActivity, FloatingWindowGFG::class.java))
-            startService(Intent(this@MainActivity, FloatingWindow::class.java))
-            finish()
+        var tag = intent.getStringExtra("tag")
+        if (!tag.isNullOrEmpty()){
+            fPVVideoView.init()
+            initVideo()
+            initData()
         }else{
-            var intent = Intent()
-            intent.action = Settings.ACTION_MANAGE_OVERLAY_PERMISSION;
-            startActivity(intent);
+            if (checkOverlayDisplayPermission()) {
+                startService(Intent(this@MainActivity, FloatingWindow::class.java))
+                finish()
+            }else{
+//                var intent = Intent()
+//                intent.action = Settings.ACTION_MANAGE_OVERLAY_PERMISSION;
+//                startActivity(intent);
+                requestOverlayDisplayPermission()
+            }
         }
+//        if (isMyServiceRunning()) {
+//            stopService(Intent(this@MainActivity, FloatingWindow::class.java))
+//        }
+//        if (checkOverlayDisplayPermission()) {
+//            startService(Intent(this@MainActivity, FloatingWindow::class.java))
+//            finish()
+//        }else{
+//            requestOverlayDisplayPermission()
+//        }
     }
 
+    private fun requestOverlayDisplayPermission() {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder.setCancelable(true)
+        builder.setTitle("Screen Overlay Permission Needed")
+        builder.setMessage("Enable 'Display over other apps' from System Settings.")
+        builder.setPositiveButton("Open Settings", DialogInterface.OnClickListener { dialog, which ->
+            val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName"))
+            startActivityForResult(intent, RESULT_OK)
+        })
+        dialog = builder.create()
+        dialog?.show()
+    }
+
+    private fun isMyServiceRunning(): Boolean {
+        val manager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
+        for (service in manager.getRunningServices(Int.MAX_VALUE)) {
+            if (FloatingWindowGFG::class.java.name == service.service.className) {
+                return true
+            }
+        }
+        return false
+    }
     @RequiresApi(Build.VERSION_CODES.M)
     private fun checkOverlayDisplayPermission(): Boolean {
-        var  s1 = Settings.canDrawOverlays(this)
         return if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
             Settings.canDrawOverlays(this)
         } else {
@@ -264,15 +313,30 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         when (v?.id) {
             R.id.rbCamera -> {
                 mediaManager = getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
-                val captureIntent: Intent = mediaManager.createScreenCaptureIntent()
-                startActivityForResult(captureIntent, Constant.TAG_ONE)
+                if (mMediaProjection == null) {
+                    val captureIntent: Intent = mediaManager.createScreenCaptureIntent()
+                    startActivityForResult(captureIntent, Constant.TAG_ONE)
+                } else {
+                    mMediaProjection?.let {
+                        MediaUtil.captureImages(this@MainActivity, it,"main")
+                    }
+                }
             }
             R.id.rbVideo -> {
-                MediaProjectionHelper.getInstance().startService(this@MainActivity)
+                mediaManager = getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
+                if (mMediaProjection == null) {
+                    val captureIntent: Intent = mediaManager.createScreenCaptureIntent()
+                    startActivityForResult(captureIntent, Constant.TAG_TWO)
+                } else {
+                    mMediaProjection?.let {
+                        MediaUtil.startMedia(this@MainActivity, it,"main")
+                        rbVideo.visibility = View.GONE
+                        rbVideoClose.visibility = View.VISIBLE
+                    }
+                }
             }
             R.id.rbVideoClose -> {
-                MediaProjectionHelper.getInstance().stopMediaRecorder()
-                MediaProjectionHelper.getInstance().stopService(this)
+                MediaUtil.stopMedia()
                 rbVideo.visibility = View.VISIBLE
                 rbVideoClose.visibility = View.GONE
             }
@@ -332,12 +396,24 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                         }
                     })
             }
+            R.id.rbAlbum -> {
+                MainUi.showPopupMenu(rbAlbum, "Desc", this)
+            }
             R.id.rbBack -> {
-                if ((System.currentTimeMillis() - exitTime) > 2000) {
-                    "再按一次退出程序".showToast(this)
-                    exitTime = System.currentTimeMillis();
-                } else {
+//                if ((System.currentTimeMillis() - exitTime) > 2000) {
+//                    "再按一次退出程序".showToast(this)
+//                    exitTime = System.currentTimeMillis();
+//                } else {
+//                    finish()
+//                }
+                if (checkOverlayDisplayPermission()) {
+//            startService(Intent(this@MainActivity, FloatingWindowGFG::class.java))
+                    startService(Intent(this@MainActivity, FloatingWindow::class.java))
                     finish()
+                }else{
+                    var intent = Intent()
+                    intent.action = Settings.ACTION_MANAGE_OVERLAY_PERMISSION;
+                    startActivity(intent);
                 }
             }
         }
@@ -351,25 +427,11 @@ class MainActivity : BaseActivity(), View.OnClickListener {
             when (requestCode) {
                 Constant.TAG_ONE -> {
                     mMediaProjection = data?.let { mediaManager.getMediaProjection(resultCode, it) }
-                    mMediaProjection?.let { CaptureImage().captureImages(this, "image", it) }
+                    mMediaProjection?.let { MediaUtil.captureImages(this, it,"main") }
                 }
                 Constant.TAG_TWO -> {
-                    MediaProjectionHelper.getInstance().createVirtualDisplay(requestCode, resultCode, data, true, true)
-
-                    rbVideo.visibility = View.GONE
-                    rbVideoClose.visibility = View.VISIBLE
-                    MediaProjectionHelper.getInstance().startMediaRecorder(object : MediaRecorderCallback() {
-                        override fun onSuccess(message: String) {
-                            super.onSuccess(message)
-                            message.showToast(this@MainActivity)
-                        }
-
-                        override fun onFail() {
-                            super.onFail()
-                            LogUtil.e("MediaRecorder onFail", "faile")
-                        }
-                    })
-
+                    mMediaProjection = data?.let { mediaManager.getMediaProjection(resultCode, it) }
+                    mMediaProjection?.let { MediaUtil.startMedia(this, it,"main") }
                     rbVideo.visibility = View.GONE
                     rbVideoClose.visibility = View.VISIBLE
                 }
@@ -382,16 +444,19 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         if (mSerialPortConnection != null) {
             try {
                 mSerialPortConnection?.closeConnection()
+                mSerialPortConnection = null
             } catch (e: IOException) {
                 e.printStackTrace()
             }
         }
         if (mFPVVideoClient != null) {
             mFPVVideoClient?.stopPlayback()
+            mFPVVideoClient = null
         }
         if (mServiceConnection != null) {
             try {
                 mServiceConnection?.closeConnection()
+                mServiceConnection = null
             } catch (e: IOException) {
                 e.printStackTrace()
             }

@@ -12,6 +12,7 @@ import android.os.Looper
 import android.util.DisplayMetrics
 import android.view.*
 import android.view.View.OnTouchListener
+import android.widget.ImageView
 import com.example.lk_etch_robot.R
 import com.example.lk_etch_robot.activity.FPVVideoClient
 import com.example.lk_etch_robot.activity.MainActivity
@@ -19,6 +20,7 @@ import com.example.lk_etch_robot.view.BaseGLHttpVideoSurface
 import com.skydroid.fpvlibrary.serial.SerialPortConnection
 import com.skydroid.fpvlibrary.serial.SerialPortControl
 import com.skydroid.fpvlibrary.widget.GLHttpVideoSurface
+import java.io.IOException
 
 
 class FloatingWindow : Service() {
@@ -27,6 +29,7 @@ class FloatingWindow : Service() {
     var floatWindowLayoutParam: WindowManager.LayoutParams? = null
     var windowManager: WindowManager? = null
     var gLHttpVideoSurface: GLHttpVideoSurface? = null
+    var imageView: ImageView? = null
     //视频渲染
     private lateinit var mFPVVideoClient: FPVVideoClient
     //usb连接实例
@@ -50,6 +53,7 @@ class FloatingWindow : Service() {
         val inflater = baseContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         floatView = inflater.inflate(R.layout.activity_main_floating, null) as ViewGroup?
         gLHttpVideoSurface = floatView!!.findViewById(R.id.fPVVideoViewFloating)
+        imageView = floatView!!.findViewById(R.id.image)
         gLHttpVideoSurface?.init()
         initVideo()
 
@@ -71,14 +75,17 @@ class FloatingWindow : Service() {
 //        floatWindowLayoutParam!!.x = 0
 //        floatWindowLayoutParam!!.y = 0
         windowManager!!.addView(floatView, floatWindowLayoutParam)
-//        gLHttpVideoSurface?.setOnClickListener(View.OnClickListener {
-//            stopSelf()
-//            windowManager!!.removeView(floatView)
-//            val backToHome = Intent(this@FloatingWindow, MainActivity::class.java)
-//            backToHome.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-//            startActivity(backToHome)
-//            LogUtil.e("TAG","111")
-//        })
+
+        imageView?.setOnClickListener(View.OnClickListener {
+            stopSelf()
+            windowManager!!.removeView(floatView)
+            val backToHome = Intent(this@FloatingWindow, MainActivity::class.java)
+            backToHome.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            backToHome.putExtra("tag","back")
+            startActivity(backToHome)
+            LogUtil.e("TAG","111")
+        })
+
         floatView?.setOnTouchListener(object : OnTouchListener {
             val floatWindowLayoutUpdateParam: WindowManager.LayoutParams = floatWindowLayoutParam as WindowManager.LayoutParams
             var x = 0.0
@@ -170,6 +177,16 @@ class FloatingWindow : Service() {
     override fun onDestroy() {
         super.onDestroy()
         stopSelf()
-        windowManager!!.removeView(floatView)
+        windowManager?.removeView(floatView)
+        if (mSerialPortConnection != null) {
+            try {
+                mSerialPortConnection?.closeConnection()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
+        if (mFPVVideoClient != null) {
+            mFPVVideoClient?.stopPlayback()
+        }
     }
 }

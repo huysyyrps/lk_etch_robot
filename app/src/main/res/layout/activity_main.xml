@@ -30,57 +30,11 @@
                 tools:ignore="MissingConstraints" />
         <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="32dp"
                 android:orientation="horizontal"
                 android:paddingLeft="5dp"
                 android:layout_marginRight="35dp"
                 android:background="@color/dialog_color">
-
-            <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="1.2"
-                    android:layout_height="30dp"
-                    android:orientation="horizontal">
-
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:textSize="11dp"
-                        android:text="工作电源："
-                        android:textColor="@color/red"/>
-
-                <TextView
-                        android:id="@+id/tvCurrentSupply"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:textSize="11dp"
-                        android:textColor="@color/red"/>
-            </LinearLayout>
-
-            <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="30dp"
-                    android:orientation="horizontal">
-
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="工作电流："
-                        android:textSize="11dp"
-                        android:textColor="@color/red"/>
-
-                <TextView
-                        android:id="@+id/tvCurrent"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:textSize="11dp"
-                        android:textColor="@color/red"/>
-            </LinearLayout>
 
             <LinearLayout
                     android:layout_width="0dp"
@@ -104,7 +58,28 @@
                         android:textSize="11dp"
                         android:textColor="@color/red"/>
             </LinearLayout>
+            <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1.2"
+                    android:layout_height="30dp"
+                    android:orientation="horizontal">
 
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:textSize="11dp"
+                        android:text="工作电源："
+                        android:textColor="@color/red"/>
+
+                <TextView
+                        android:id="@+id/tvCurrentSupply"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:textSize="11dp"
+                        android:textColor="@color/red"/>
+            </LinearLayout>
             <LinearLayout
                     android:layout_width="0dp"
                     android:layout_weight="1.1"
@@ -127,7 +102,6 @@
                         android:layout_marginTop="2dp"
                         android:layout_gravity="center"/>
             </LinearLayout>
-
             <LinearLayout
                     android:layout_width="0dp"
                     android:layout_weight="1.1"
@@ -150,6 +124,104 @@
             </LinearLayout>
 
         </LinearLayout>
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:orientation="horizontal"
+                android:paddingLeft="5dp"
+                android:layout_marginRight="35dp"
+                android:layout_marginTop="32dp"
+                android:background="@color/dialog_color">
+
+            <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="30dp"
+                    android:orientation="horizontal">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:textSize="11dp"
+                        android:text="升降状态："
+                        android:textColor="@color/red"/>
+
+                <TextView
+                        android:id="@+id/tvLiftingState"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:textSize="11dp"
+                        android:textColor="@color/red"/>
+            </LinearLayout>
+            <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1.2"
+                    android:layout_height="30dp"
+                    android:orientation="horizontal">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="工作电流："
+                        android:textSize="11dp"
+                        android:textColor="@color/red"/>
+
+                <TextView
+                        android:id="@+id/tvCurrent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:textSize="11dp"
+                        android:textColor="@color/red"/>
+            </LinearLayout>
+            <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1.1"
+                    android:layout_height="30dp"
+                    android:orientation="horizontal">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="运 行  距 离："
+                        android:textSize="11dp"
+                        android:textColor="@color/red"/>
+
+                <TextView
+                        android:id="@+id/tvDistance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:textSize="11dp"
+                        android:textColor="@color/red"/>
+            </LinearLayout>
+            <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1.1"
+                    android:layout_height="30dp"
+                    android:visibility="invisible"
+                    android:orientation="horizontal">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="备用电源电量："
+                        android:textSize="11dp"
+                        android:textColor="@color/red"/>
+                <com.example.lk_etch_robot.view.BatteryView
+                        android:layout_width="35dp"
+                        android:layout_height="15dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_gravity="center"/>
+            </LinearLayout>
+
+
+        </LinearLayout>
     </FrameLayout>
 
 
@@ -157,7 +229,7 @@
             android:id="@+id/heightView"
             android:layout_width="25dp"
             android:layout_height="match_parent"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="68dp"
             android:layout_gravity="left"/>
 
     <TextView
@@ -231,7 +303,7 @@
         <com.example.lk_etch_robot.view.BaseButton
                 android:id="@+id/rbBack"
                 style="@style/MainRadionButton"
-                android:drawableTop="@drawable/ic_finish"
+                android:drawableTop="@drawable/ic_small1"
                 android:text="最小化"
                 android:textColor="@color/whith"
                 android:textSize="11dp"

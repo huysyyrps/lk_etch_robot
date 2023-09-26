@@ -101,4 +101,23 @@ object BinaryChange {
         }
         return bytes
     }
+
+    /**
+     * 高位补零
+     */
+    fun addZeroForNum(str: String, strLength: Int): String? {
+        var str = str
+        var strLen = str.length
+        if (strLen < strLength) {
+            while (strLen < strLength) {
+                val sb = StringBuffer()
+                sb.append("0").append(str);// 左补0
+//                sb.append(str).append("0") //右补0
+                str = sb.toString()
+                strLen = str.length
+            }
+        }
+        str = String.format(str).toUpperCase() //转为大写
+        return str
+    }
 }

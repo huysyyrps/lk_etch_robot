@@ -13,7 +13,6 @@
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="25dp"
-            android:layout_gravity="center"
             android:background="@drawable/shape_tab_bg"
             app:tabIndicator="@drawable/shape_full_tab_indicator"
             app:tabIndicatorColor="@color/theme_back_color"
@@ -51,14 +50,13 @@
             <com.example.lk_etch_robot.view.BaseTextView
                     style="@style/MyTextView"
                     android:layout_width="wrap_content"
-                    app:tv_title="保护电量(%  \u3000范围:20~90) " />
+                    app:tv_title="表面曲率 " />
             <EditText
-                    android:id="@+id/etProtectElectQuantity"
+                    android:id="@+id/etPipeDiameter"
                     style="@style/EditText"
                     android:layout_marginTop="0dp"
                     android:inputType="number"
                     android:layout_width="match_parent"/>
-
 
             <com.example.lk_etch_robot.view.BaseTextView
                     style="@style/MyTextView"
@@ -72,25 +70,49 @@
                     android:inputType="number"
                     android:layout_width="match_parent"/>
 
-            <com.example.lk_etch_robot.view.BaseTextView
-                    style="@style/MyTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_marginTop="5dp"
-                    app:tv_title="保护电流(A   \u3000范围:2.0~6.0)" />
-            <EditText
-                    android:id="@+id/etProtectCurrent"
-                    style="@style/EditText"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginBottom="0dp"
-                    android:inputType="number|numberDecimal"
-                    android:layout_width="match_parent"/>
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+                <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+                    <com.example.lk_etch_robot.view.BaseTextView
+                            style="@style/MyTextView"
+                            android:layout_width="wrap_content"
+                            app:tv_title="保护电量(%  \u3000范围:20~90) " />
+                    <EditText
+                            android:id="@+id/etProtectElectQuantity"
+                            style="@style/EditText"
+                            android:layout_marginTop="0dp"
+                            android:inputType="number"
+                            android:layout_width="match_parent"/>
+                </LinearLayout>
+                <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+                    <com.example.lk_etch_robot.view.BaseTextView
+                            style="@style/MyTextView"
+                            android:layout_width="wrap_content"
+                            app:tv_title="保护电流(A   \u3000范围:2.0~6.0)" />
+                    <EditText
+                            android:id="@+id/etProtectCurrent"
+                            style="@style/EditText"
+                            android:layout_marginTop="0dp"
+                            android:inputType="number|numberDecimal"
+                            android:layout_width="match_parent"/>
+                </LinearLayout>
 
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginBottom="0dp"
@@ -99,21 +121,26 @@
         <com.example.lk_etch_robot.view.BaseButton
                 android:id="@+id/btnFormCancel"
                 style="@style/BaseButton"
+                android:layout_height="30dp"
                 android:layout_marginBottom="0dp"
                 android:layout_width="0dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginRight="5dp"
                 android:layout_weight="1"
                 android:text="@string/btn_cancel"
+                android:layout_marginLeft="0dp"
                 app:bg_color="@color/theme_color"
                 app:bg_corner="5dp" />
 
         <com.example.lk_etch_robot.view.BaseButton
                 android:id="@+id/btnFormSure"
                 style="@style/BaseButton"
+                android:layout_height="30dp"
                 android:layout_marginBottom="0dp"
                 android:layout_width="0dp"
+                android:layout_marginRight="0dp"
                 android:layout_weight="1"
                 android:text="@string/btn_sure"
+                android:layout_marginLeft="15dp"
                 app:bg_color="@color/theme_color"
                 app:bg_corner="5dp" />
     </LinearLayout>

@@ -58,7 +58,7 @@ import com.example.lk_etch_robot.R
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         if (percent > protectElectQuantity) {
-            paintFill.color = resources.getColor(R.color.holo_blue_light)
+            paintFill.color = resources.getColor(R.color.text_green)
         } else {
             paintFill.color = resources.getColor(R.color.red)
         }
@@ -74,7 +74,7 @@ import com.example.lk_etch_robot.R
         canvas.drawRect(textRectF, paintFill)
         canvas.drawRoundRect(powerBodyRectF, 8.0f, 8.0f, paintPowerBody)
         canvas.drawRect(powerHeaderRectF, paintPowerHeader)
-        canvas.drawText(percent .toString(), (width / 2 - dip2px(4.5f)).toFloat(), (height - height * 2.3 / 5.5).toFloat(), paintText)
+        canvas.drawText(percent .toString(), (width / 2 - dip2px(6.5f)).toFloat(), (height - height * 2.3 / 5.5).toFloat(), paintText)
     }
 
     @Synchronized

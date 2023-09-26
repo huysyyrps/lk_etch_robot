@@ -8,7 +8,7 @@ import com.afollestad.materialdialogs.customview.customView
 import com.example.lk_etch_robot.R
 import com.example.lk_etch_robot.activity.MainActivity
 import com.example.lk_etch_robot.util.showToast
-import kotlinx.android.synthetic.main.dialog_save_video.*
+import kotlinx.android.synthetic.main.dialog_battery.*
 import kotlinx.android.synthetic.main.dialog_setting.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -24,6 +24,7 @@ class MainDialog {
     @SuppressLint("MissingPermission")
     fun SettingDialog(
         activity: MainActivity,
+        pipeDiameter: Int,
         protectElectQuantity: Int,
         changeElectQuantity: Int,
         protectCurrent: Float,
@@ -36,10 +37,12 @@ class MainDialog {
                     viewRes = R.layout.dialog_setting,//自定义文件
                     dialogWrapContent = true,    //让自定义宽度生效
                     scrollable = true,            //让自定义宽高生效
-                    noVerticalPadding = true    //让自定义高度生效
+                    noVerticalPadding = true,   //让自定义高度生效
+
                 )
                 cornerRadius(16f)
             }
+        dialog.etPipeDiameter.setText("$pipeDiameter")
         dialog.etProtectElectQuantity.setText("$protectElectQuantity")
         dialog.etChangeElectQuantity.setText("$changeElectQuantity")
         dialog.etProtectCurrent.setText("$protectCurrent")
@@ -49,6 +52,10 @@ class MainDialog {
             dialog.dismiss()
         }
         dialog.btnFormSure.setOnClickListener {
+            if (dialog.etPipeDiameter.text.toString().trim { it <= ' ' } == "") {
+                "表面曲率".showToast(activity)
+                return@setOnClickListener
+            }
             if (dialog.etProtectElectQuantity.text.toString().trim { it <= ' ' } == "") {
                 "保护电量不能为空".showToast(activity)
                 return@setOnClickListener
@@ -86,6 +93,7 @@ class MainDialog {
             }
 
             settingDialogCallBack.callBack(
+                dialog.etPipeDiameter.text.toString(),
                 dialog.etProtectElectQuantity.text.toString(),
                 dialog.etChangeElectQuantity.text.toString(),
                 dialog.etProtectCurrent.text.toString(),
@@ -96,26 +104,23 @@ class MainDialog {
     }
 
 
-    fun SaveVideo(
-        activity: MainActivity,
-        callBacl:SaveDialogCallBack
-    ) {
+    fun showBatteryDialog(activity: MainActivity, title:String ) {
         dialog = MaterialDialog(activity)
             .cancelable(true)
             .show {
                 customView(    //自定义弹窗
-                    viewRes = R.layout.dialog_save_video,//自定义文件
+                    viewRes = R.layout.dialog_battery,//自定义文件
                     dialogWrapContent = true,    //让自定义宽度生效
                     scrollable = true,            //让自定义宽高生效
                     noVerticalPadding = true    //让自定义高度生效
                 )
                 cornerRadius(16f)
             }
+        dialog.tvBattery.text = "$title${activity.resources.getString(R.string.battery_show_title)}"
         dialog.btnSaveCancel.setOnClickListener {
             dialog.dismiss()
         }
         dialog.btnSaveSure.setOnClickListener {
-            callBacl.callBack(getNowDate())
             dialog.dismiss()
         }
     }

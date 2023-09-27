@@ -240,6 +240,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                     }
                 }
                 if (stringData.startsWith("B102") && stringData.length == 38) {
+                    LogUtil.e("TAG",stringData)
                     if (ByteDataChange.HexStringToBytes(stringData.substring(0, 36)) == stringData.subSequence(36, 38)) {
                         //当前工作电源
                         val currentSupply = Integer.valueOf(stringData.substring(6, 8), 16)
@@ -261,11 +262,14 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                         //当前抬升位置
                         val height = Integer.valueOf(stringData.substring(24, 26), 16)
                         //编码器数字
-                        var distance = java.lang.Float.intBitsToFloat(Integer.valueOf(stringData.substring(26, 34), 16))
-                        if (distance<0){
-                            distance=0.0F
-                        }
-                        val distanceFormat = df.format(distance)
+                        val intBits = java.lang.Long.valueOf(stringData.substring(26, 34), 16).toInt()
+                        val floatValue = java.lang.Float.intBitsToFloat(intBits)
+//                        var distance = java.lang.Float.intBitsToFloat(Integer.valueOf(stringData.substring(26, 34), 16))
+//                        var distance = java.lang.Float.intBitsToFloat(Integer.valueOf("40490FDB", 16))
+//                        if (distance<0){
+//                            distance=0.0F
+//                        }
+                        val distanceFormat = df.format(floatValue)
                         CoroutineScope(Dispatchers.Main).launch {
                             if(currentSupplyState!=currentSupply){
                                 if (currentSupply == 1) {

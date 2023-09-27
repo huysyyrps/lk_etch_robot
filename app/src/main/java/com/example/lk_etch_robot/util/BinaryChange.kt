@@ -35,6 +35,19 @@ object BinaryChange {
     }
 
     /**
+     * 设置数据格式
+     */
+    fun dataChange(hex: String, division: Boolean): String? {
+        val stringData: String = if (division) {
+            String.format("%.1f", hex.toInt(16).toFloat() / 10)
+        } else {
+            String.format("%.0f", hex.toBigInteger(16).toFloat())
+        }
+        return stringData
+    }
+
+
+    /**
      * iEEE754转float
      */
     fun ieee754ToFloat(ieeData: Int): Float {
@@ -119,5 +132,43 @@ object BinaryChange {
         }
         str = String.format(str).toUpperCase() //转为大写
         return str
+    }
+
+    /**
+     * 将二进制转换成16进制
+     *
+     * @param buf
+     * @return
+     *     fun parseByte2HexStr(buf: ByteArray): String? {
+    val sb = StringBuffer()
+    for (i in buf.indices) {
+    var hex = Integer.toHexString(buf[i] and 0xFF)
+    if (hex.length == 1) {
+    hex = "0$hex"
+    }
+    sb.append(hex.toUpperCase())
+    }
+    return sb.toString()
+    }
+     */
+
+
+    /**
+     * 将16进制转换为二进制
+     *
+     * @param hexStr
+     * @return
+     */
+    fun parseHexStr2Byte(hexStr: String): ByteArray? {
+        if (hexStr.length < 1) return null
+        val result = ByteArray(hexStr.length / 2)
+        for (i in 0 until hexStr.length / 2) {
+            val high = hexStr.substring(i * 2, i * 2 + 1).toInt(16)
+            val low = hexStr.substring(i * 2 + 1, i * 2 + 2).toInt(
+                16
+            )
+            result[i] = (high * 16 + low).toByte()
+        }
+        return result
     }
 }

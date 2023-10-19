@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:background="@color/white"
+        tools:context=".fragment.FirstFragment"
+        tools:ignore="MissingDefaultResource">
+
+    <LinearLayout
+            android:layout_width="@dimen/guide_margin_left"
+            android:layout_height="match_parent">
+        <ImageView
+                android:id="@+id/ivFirst"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:layout_marginBottom="25dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginTop="45dp">
+        <TextView
+                style="@style/GuideTextView"
+                android:text="@string/first_fragment_first_step"/>
+        <TextView
+                style="@style/GuideTextView"
+                android:text="@string/first_fragment_second_step"/>
+        <TextView
+                style="@style/GuideTextView"
+                android:text="@string/first_fragment_three_step"/>
+        <TextView
+                style="@style/GuideTextView"
+                android:layout_height="65dp"
+                android:lineHeight="25dp"
+                android:text="@string/first_fragment_four_step"/>
+    </LinearLayout>
+
+
+</LinearLayout>

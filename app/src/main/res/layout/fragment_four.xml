@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical"
+        tools:context=".fragment.FirstFragment"
+        tools:ignore="MissingDefaultResource">
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginTop="36dp"
+            android:layout_marginLeft="20dp"
+            android:gravity="center"
+            android:text="正在检查设备连接情况，即刻开启工作模式！"
+            android:textColor="@color/black"
+            android:textSize="16dp" />
+
+    <LinearLayout
+            android:id="@+id/progressDialogLayout"
+            android:layout_width="230dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="40dp"
+            android:orientation="vertical">
+
+        <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                android:indeterminateDrawable="@drawable/scanning" />
+
+        <TextView
+                android:id="@+id/txtFeedBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:text="等待中....."
+                android:textColor="@color/black" />
+    </LinearLayout>
+
+</LinearLayout>

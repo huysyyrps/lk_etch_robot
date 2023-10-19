@@ -5,111 +5,237 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_marginBottom="0dp"
-        android:paddingLeft="10dp">
+        android:minWidth="500dp"
+        android:minHeight="440dp">
 
-<!--    <include layout="@layout/dialog_item_header" />-->
-
-    <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabLayout"
+    <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="25dp"
-            android:background="@drawable/shape_tab_bg"
-            app:tabIndicator="@drawable/shape_full_tab_indicator"
-            app:tabIndicatorColor="@color/theme_back_color"
-            app:tabIndicatorFullWidth="true"
-            app:tabIndicatorHeight="25dp"
-            app:tabMinWidth="199dp"
-            android:layout_margin="10dp"
-            app:tabMode="fixed"
-            app:tabSelectedTextColor="@color/red"
-            app:tabTextColor="@color/white">
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal">
 
-        <com.google.android.material.tabs.TabItem
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/power_on" />
+        <ImageView
+                android:id="@+id/ivClose"
+                android:layout_width="30dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="5dp"
+                android:src="@drawable/ic_close" />
 
-        <com.google.android.material.tabs.TabItem
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/power_off" />
-    </com.google.android.material.tabs.TabLayout>
+        <com.suke.widget.SwitchButton
+                android:id="@+id/swOffOn"
+                android:layout_width="70dp"
+                android:layout_height="35dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                app:sb_checked="true"
+                app:sb_checked_color="@color/theme_color" />
+
+    </RelativeLayout>
 
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="0dp"
-            android:orientation="vertical"
-            android:paddingBottom="0dp">
+            android:orientation="vertical">
 
         <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="30dp"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
 
-            <com.example.lk_etch_robot.view.BaseTextView
-                    style="@style/MyTextView"
+                android:layout_marginBottom="10dp">
+
+            <TextView
+                    android:layout_height="match_parent"
                     android:layout_width="wrap_content"
-                    app:tv_title="表面曲率 " />
+                    android:gravity="center"
+                    android:text="表面曲率: "
+                    android:textColor="@color/white"
+                    android:textSize="16dp" />
+
             <EditText
                     android:id="@+id/etPipeDiameter"
                     style="@style/EditText"
-                    android:layout_marginTop="0dp"
-                    android:inputType="number"
-                    android:layout_width="match_parent"/>
-
-            <com.example.lk_etch_robot.view.BaseTextView
-                    style="@style/MyTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_marginTop="5dp"
-                    app:tv_title="强制切换备用电源电量(%   \u3000范围:10~保护电量)" />
-            <EditText
-                    android:id="@+id/etChangeElectQuantity"
-                    style="@style/EditText"
-                    android:layout_marginTop="0dp"
-                    android:inputType="number"
-                    android:layout_width="match_parent"/>
-
-            <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-                <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
-                    <com.example.lk_etch_robot.view.BaseTextView
-                            style="@style/MyTextView"
-                            android:layout_width="wrap_content"
-                            app:tv_title="保护电量(%  \u3000范围:20~90) " />
-                    <EditText
-                            android:id="@+id/etProtectElectQuantity"
-                            style="@style/EditText"
-                            android:layout_marginTop="0dp"
-                            android:inputType="number"
-                            android:layout_width="match_parent"/>
-                </LinearLayout>
-                <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
-                    <com.example.lk_etch_robot.view.BaseTextView
-                            style="@style/MyTextView"
-                            android:layout_width="wrap_content"
-                            app:tv_title="保护电流(A   \u3000范围:2.0~6.0)" />
-                    <EditText
-                            android:id="@+id/etProtectCurrent"
-                            style="@style/EditText"
-                            android:layout_marginTop="0dp"
-                            android:inputType="number|numberDecimal"
-                            android:layout_width="match_parent"/>
-                </LinearLayout>
+                    android:layout_marginTop="0dp"
+                    android:inputType="number"
+                    android:layout_marginRight="40dp" />
 
+            <TextView
+                    android:id="@+id/tvOffOn"
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="15dp"
+                    android:gravity="center|top"
+                    android:text="开机 "
+                    android:textColor="@color/white"
+                    android:textSize="14dp" />
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@color/theme_back_color"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp">
+            <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="0.9"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="left|bottom"
+                        android:text="强制切换备用电源电量"
+                        android:textColor="@color/white"
+                        android:textSize="12dp" />
+
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="left|top"
+                        android:text="(范围：10%—保护电量)"
+                        android:textColor="@color/white"
+                        android:textSize="12dp" />
             </LinearLayout>
+            <TextView
+                    android:id="@+id/tvChangeElectQuantity"
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="12dp"
+                    android:gravity="center|right"
+                    android:text="10"
+                    android:textColor="@color/white"
+                    android:textSize="16dp" />
+            <SeekBar
+                    android:id="@+id/sbChangeElectQuantity"
+                    android:layout_width="0dp"
+                    android:layout_weight="1.2"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center"
+                    android:min="10"
+                    android:max="100"
+                    android:maxHeight="5.0dp"
+                    android:minHeight="5.0dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp">
+            <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="0.9"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="left|bottom"
+                        android:text="保护电量"
+                        android:textColor="@color/white"
+                        android:textSize="12dp" />
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="left|top"
+                        android:text="(范围：20% — 90%)"
+                        android:textColor="@color/white"
+                        android:textSize="12dp" />
+            </LinearLayout>
+            <TextView
+                    android:id="@+id/tvProtectElectQuantity"
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="12dp"
+                    android:gravity="center|right"
+                    android:text="10"
+                    android:textColor="@color/white"
+                    android:textSize="16dp" />
+            <SeekBar
+                    android:id="@+id/sbProtectElectQuantity"
+                    android:layout_width="0dp"
+                    android:layout_weight="1.2"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center"
+                    android:min="20"
+                    android:max="110"
+                    android:maxHeight="5.0dp"
+                    android:minHeight="5.0dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@color/theme_back_color"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp">
+            <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="0.9"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="left|bottom"
+                        android:text="保护电流"
+                        android:textColor="@color/white"
+                        android:textSize="12dp" />
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="left|top"
+                        android:text="(范围：2.0A— 6.0A)"
+                        android:textColor="@color/white"
+                        android:textSize="12dp" />
+            </LinearLayout>
+            <TextView
+                    android:id="@+id/tvProtectCurrent"
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="12dp"
+                    android:gravity="center|right"
+                    android:text="10"
+                    android:textColor="@color/white"
+                    android:textSize="16dp" />
+<!--            <SeekBar-->
+<!--                    android:id="@+id/sbProtectCurrent"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_weight="1.2"-->
+<!--                    android:layout_height="25dp"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:min="2"-->
+<!--                    android:max="8"-->
+<!--                    android:maxHeight="5.0dp"-->
+<!--                    android:minHeight="5.0dp"/>-->
+            <com.warkiz.tickseekbar.TickSeekBar
+                    android:id="@+id/sbProtectCurrent"
+                    android:layout_width="0dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1.2"
+                    app:tsb_progress="0"/>
         </LinearLayout>
     </LinearLayout>
+
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -119,29 +245,17 @@
             android:orientation="horizontal">
 
         <com.example.lk_etch_robot.view.BaseButton
-                android:id="@+id/btnFormCancel"
-                style="@style/BaseButton"
-                android:layout_height="30dp"
-                android:layout_marginBottom="0dp"
-                android:layout_width="0dp"
-                android:layout_marginRight="5dp"
-                android:layout_weight="1"
-                android:text="@string/btn_cancel"
-                android:layout_marginLeft="0dp"
-                app:bg_color="@color/theme_color"
-                app:bg_corner="5dp" />
-
-        <com.example.lk_etch_robot.view.BaseButton
                 android:id="@+id/btnFormSure"
                 style="@style/BaseButton"
                 android:layout_height="30dp"
                 android:layout_marginBottom="0dp"
                 android:layout_width="0dp"
-                android:layout_marginRight="0dp"
+                android:layout_marginRight="35dp"
                 android:layout_weight="1"
                 android:text="@string/btn_sure"
-                android:layout_marginLeft="15dp"
+                android:layout_marginLeft="35dp"
                 app:bg_color="@color/theme_color"
+                android:textColor="@color/white"
                 app:bg_corner="5dp" />
     </LinearLayout>
 </LinearLayout>

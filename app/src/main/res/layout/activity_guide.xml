@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical"
+        tools:context=".activity.GuideActivity"
+        tools:ignore="MissingDefaultResource">
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/guide_margin_top"
+            android:orientation="horizontal">
+
+        <TextView
+                android:id="@+id/tvFirstTitle"
+                style="@style/GuideTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/guide_margin_left"
+                android:text="@string/equipment_startup_and_operation"
+                android:textSize="18dp" />
+
+        <LinearLayout
+                android:layout_width="60dp"
+                android:layout_height="23dp"
+                android:layout_marginLeft="11dp"
+                android:layout_toRightOf="@+id/tvFirstTitle"
+                android:background="@color/title_color"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+            <TextView
+                    android:id="@+id/tvStep"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center"
+                    android:text="1/4"
+                    android:textColor="@color/black"
+                    android:textSize="16dp" />
+
+            <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="6dp"
+                    android:padding="2sp"
+                    android:src="@drawable/ic_go" />
+
+        </LinearLayout>
+
+        <TextView
+                android:id="@+id/tvJump"
+                android:layout_width="50dp"
+                android:layout_height="25dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/linelayout_border_radion"
+                android:gravity="center"
+                android:text="@string/jump"
+                android:textColor="@color/black" />
+    </RelativeLayout>
+
+    <LinearLayout
+            android:layout_width="@dimen/step_image_wight"
+            android:layout_height="@dimen/step_image_height"
+            android:layout_marginLeft="@dimen/step_margin_left"
+            android:layout_marginBottom="@dimen/step_image_bottom"
+            android:visibility="gone"
+            android:background="@drawable/ic_look_skip_back">
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="3dp"
+                android:gravity="center"
+                android:text="点击看看还有几步"
+                android:textColor="@color/black"
+                android:textSize="12dp" />
+    </LinearLayout>
+
+    <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+</LinearLayout>

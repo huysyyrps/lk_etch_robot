@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="guide_margin_top">18.67dp</dimen>
+    <dimen name="guide_margin_left">223.67dp</dimen>
+    <dimen name="guide_margin_bottom">64.33dp</dimen>
+    <dimen name="step_margin_left">377.33dp</dimen>
+    <dimen name="step_image_wight">105dp</dimen>
+    <dimen name="step_image_height">35dp</dimen>
+    <dimen name="step_image_bottom">25.67dp</dimen>
+</resources>

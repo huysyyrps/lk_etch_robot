@@ -297,4 +297,5 @@
     <color name="color_preloader_start">#000000</color>
     <color name="color_preloader_center">#000000</color>
     <color name="color_preloader_end">#00BD08</color>
+    <color name="title_color">#CCCCCC</color>
 </resources>

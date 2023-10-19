@@ -17,6 +17,7 @@ import com.example.lk_etch_robot.util.AdapterPositionCallBack
 import com.example.lk_etch_robot.util.BaseActivity
 import com.example.lk_etch_robot.util.Constant
 import com.example.lk_etch_robot.util.FileGet.listFileSortByModifyTime
+import com.example.lk_etch_robot.util.StatusBarUtils
 import com.scwang.smart.refresh.footer.ClassicsFooter
 import com.scwang.smart.refresh.header.ClassicsHeader
 import kotlinx.android.synthetic.main.activity_image_list.*
@@ -39,6 +40,7 @@ class ImageListActivity : BaseActivity() {
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        StatusBarUtils.setWindowStatusBarColor(this, R.color.white)
         setContentView(R.layout.activity_image_list)
         val layoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = layoutManager

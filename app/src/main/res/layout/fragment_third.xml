@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:background="@color/white"
+        tools:context=".fragment.FirstFragment"
+        tools:ignore="MissingDefaultResource">
+
+    <LinearLayout
+            android:layout_width="@dimen/guide_margin_left"
+            android:layout_height="match_parent">
+        <ImageView
+                android:id="@+id/ivFirst"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:layout_marginBottom="25dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginTop="45dp">
+        <TextView
+                style="@style/GuideTextView"
+                android:text="1、将该窗口最小化，打开APP ETGmini;"/>
+        <TextView
+                style="@style/GuideTextView"
+                android:text="2、长按测厚仪设置键，等待测厚仪与遥控器\n \t\t\t完成配对;"/>
+        <TextView
+                style="@style/GuideTextView"
+                android:layout_marginTop="25dp"
+                android:text="3、将测厚仪放入机器人顶部圆管,并盖上管盖;"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>

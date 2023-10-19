@@ -23,4 +23,14 @@
     <string name="movement">手动</string>
 
     <string name="battery_show_title">电量低于保护电量，请及时补充电量</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="equipment_startup_and_operation">设备开机与操作</string>
+    <string name="jump">跳过</string>
+    <string name="small">最小化</string>
+
+    <string name="first_fragment_first_step">1、取出测厚仪，按电源键打开测厚仪;</string>
+    <string name="first_fragment_second_step">2、取出机器人，将电池放入机器人电池仓;</string>
+    <string name="first_fragment_three_step">3、将遥控器顶部两侧金属开关向内拨动;</string>
+    <string name="first_fragment_four_step">4、点击机器人按钮，等待遥控器不再发出提示音， \n \t\t\t表机器人开机完成并于遥控器建立连接。</string>
 </resources>

@@ -15,7 +15,9 @@ import android.os.Looper
 import android.provider.Settings
 import android.view.KeyEvent
 import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.core.view.isVisible
 import com.example.lk_etch_robot.R
 import com.example.lk_etch_robot.dialog.MainDialog
 import com.example.lk_etch_robot.dialog.SettingDialogCallBack
@@ -68,6 +70,12 @@ class MainActivity : BaseActivity(), View.OnClickListener {
     //是否显示弹窗
     var showDialog = true
 
+    companion object{
+        fun actionStart(context: Context) {
+            val intent = Intent(context, MainActivity::class.java)
+            context.startActivity(intent)
+        }
+    }
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.action === KeyEvent.ACTION_DOWN) {
             if (System.currentTimeMillis() - exitTime > 2000) {
@@ -93,20 +101,26 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         rbSetting.setOnClickListener(this)
         rbBack.setOnClickListener(this)
         rbAlbum.setOnClickListener(this)
+        ivMenu.setOnClickListener(this)
+
 
         val tag = intent.getStringExtra("tag")
-        if (!tag.isNullOrEmpty()){
-            fPVVideoView.init()
-            initVideo()
-            initData()
-        }else{
-            if (checkOverlayDisplayPermission()) {
-                startService(Intent(this@MainActivity, FloatingWindow::class.java))
-                finish()
-            }else{
-                requestOverlayDisplayPermission()
-            }
-        }
+//        if (!tag.isNullOrEmpty()){
+//            fPVVideoView.init()
+//            initVideo()
+//            initData()
+//        }else{
+//            if (checkOverlayDisplayPermission()) {
+//                startService(Intent(this@MainActivity, FloatingWindow::class.java))
+//                finish()
+//            }else{
+//                requestOverlayDisplayPermission()
+//            }
+//        }
+        fPVVideoView.init()
+        initVideo()
+        initData()
+        DisplayUtil.hideNavBar(this)
     }
 
     private fun requestOverlayDisplayPermission() {
@@ -259,7 +273,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                         //抬升标识
                         val liftingState = Integer.valueOf(stringData.substring(22, 24), 16)
                         //当前抬升位置
-                        val height = Integer.valueOf(stringData.substring(24, 26), 16)
+                        var height = Integer.valueOf(stringData.substring(24, 26), 16)
                         //编码器数字
                         val intBits = java.lang.Long.valueOf(stringData.substring(26, 34), 16).toInt()
                         val floatValue = java.lang.Float.intBitsToFloat(intBits)
@@ -274,10 +288,12 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                                 currentSupplyState = currentSupply
                                 "${resources.getString(R.string.current_supply)}${tvCurrentSupply.text}".showToast(this@MainActivity)
                             }
-                            bvMainElectQuantity.BatteryView()
-                            bvElectQuantity.BatteryView()
-                            bvMainElectQuantity.setProgress(mainElectQuantity.toInt(),protectElectQuantity)
-                            bvElectQuantity.setProgress(electQuantity.toInt(),protectElectQuantity)
+//                            bvMainElectQuantity.BatteryView()
+//                            bvElectQuantity.BatteryView()
+//                            bvMainElectQuantity.setProgress(mainElectQuantity.toInt(),protectElectQuantity)
+//                            bvElectQuantity.setProgress(electQuantity.toInt(),protectElectQuantity)
+                            tvMainElectQuantity.text = "$mainElectQuantity"
+                            tvElectQuantity.text = "$electQuantity"
                             tvCurrent.text = currentFormat
                             if (lightState==0){
                                 tvLightState.text = resources.getString(R.string.close)
@@ -289,8 +305,14 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                             }else if (liftingState==1){
                                 tvLiftingState.text = resources.getString(R.string.auto)
                             }
-                            heightView.HeightView(liftingState)
-                            heightView.height = height
+//                            heightView.HeightView(liftingState)
+//                            heightView.height = height
+                            val layoutParams: ViewGroup.LayoutParams = ivHeight.layoutParams
+                            var dpValue = 305*height/100
+                            val density = resources.displayMetrics.density
+                            val pxValue = (dpValue * density + 0.5f)
+                            layoutParams.height = pxValue.toInt()
+                            ivHeight.layoutParams = layoutParams
                             tvHeight.text = "抬升高度$height"
                             tvDistance.text = distanceFormat.toString()
 
@@ -358,14 +380,24 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                 rbVideoClose.visibility = View.GONE
             }
             R.id.rbSetting -> {
-                MainDialog().SettingDialog(this@MainActivity, pipeDiameter, protectElectQuantity, changeElectQuantity, protectCurrent,
+                MainDialog().SettingDialog1(this, pipeDiameter, protectElectQuantity, changeElectQuantity, protectCurrent,
                     object : SettingDialogCallBack {
-                        override fun callBack(pipeDiameter: String, protectElectQuantity: String, changeElectQuantity: String, protectCurrent: String, power: String) {
+                        override fun dimiss() {
+                            DisplayUtil.hideNavBar(this@MainActivity)
+                        }
+
+                        override fun callBack(
+                            pipeDiameter: String,
+                            protectElectQuantity: String,
+                            changeElectQuantity: String,
+                            protectCurrent: String,
+                            power: String
+                        ) {
                             sendState = true
-                            sendSettingData(pipeDiameter,protectElectQuantity,changeElectQuantity,protectCurrent,power)
-                            CoroutineScope(Dispatchers.Main).launch  {
-                                while (sendState){
-                                    if (System.currentTimeMillis()-startTime>=1000L) {
+                            sendSettingData(pipeDiameter, protectElectQuantity, changeElectQuantity, protectCurrent, power)
+                            CoroutineScope(Dispatchers.Main).launch {
+                                while (sendState) {
+                                    if (System.currentTimeMillis() - startTime >= 1000L) {
                                         if (this@MainActivity.pipeDiameter.toString() == pipeDiameter
                                             && this@MainActivity.changeElectQuantity.toString() == changeElectQuantity
                                             && this@MainActivity.changeElectQuantity.toString() == changeElectQuantity
@@ -386,7 +418,6 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                                     }
                                 }
                             }
-
                         }
                     })
             }
@@ -403,19 +434,21 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                     startActivity(intent)
                 }
             }
+            R.id.ivMenu ->{
+                if (radioGroup.isVisible){
+                    radioGroup.visibility = View.GONE
+                }else{
+                    radioGroup.visibility = View.VISIBLE
+                }
+            }
         }
     }
-    fun sendSettingData(
-        pipeDiameterBack: String,
-        protectElectQuantityBack: String,
-        changeElectQuantityBack: String,
-        protectCurrentBack: String,
-        power: String
-    ) {
+
+    fun sendSettingData(pipeDiameterBack: String, protectElectQuantityBack: String, changeElectQuantityBack: String, protectCurrentBack: String, power: String) {
         if (mSerialPortConnection?.isConnection == true) {
             val hexPipeDiameter: String = BinaryChange.addZeroForNum(Integer.toHexString(pipeDiameterBack.toInt()),4) .toString()
-            val hexProtectElectQuantity: String = Integer.toHexString(protectElectQuantityBack.toInt())
-            val hexChangeElectQuantity: String = Integer.toHexString(changeElectQuantityBack.toInt())
+            val hexProtectElectQuantity: String = BinaryChange.addZeroForNum(Integer.toHexString(protectElectQuantityBack.toInt()),2).toString()
+            val hexChangeElectQuantity: String = BinaryChange.addZeroForNum(Integer.toHexString(changeElectQuantityBack.toInt()),2).toString()
             val hexProtectCurrent: String = BinaryChange.singleToHex(protectCurrentBack.toFloat()).toString()
             var data = "A10303$hexProtectElectQuantity$hexChangeElectQuantity$hexPipeDiameter$hexProtectCurrent$power"
             data = "$data${ByteDataChange.HexStringToBytes(data)}"
@@ -473,5 +506,4 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         }
         timer.cancel()
     }
-
 }

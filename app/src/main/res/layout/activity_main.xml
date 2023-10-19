@@ -10,15 +10,6 @@
         android:id="@+id/framLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-<!--        <com.skydroid.fpvlibrary.widget.GLHttpVideoSurface-->
-<!--                android:id="@+id/fPVVideoView"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_margin="0dp"-->
-<!--                android:gravity="top"-->
-<!--                android:padding="0dp"-->
-<!--                android:layout_marginRight="35dp"-->
-<!--                tools:ignore="MissingConstraints" />-->
         <com.example.lk_etch_robot.util.usbfpv.GLHttpVideoSurface
                 android:id="@+id/fPVVideoView"
                 android:layout_width="match_parent"
@@ -33,22 +24,18 @@
                 android:layout_height="32dp"
                 android:orientation="horizontal"
                 android:paddingLeft="5dp"
-                android:layout_marginRight="35dp"
                 android:background="@color/dialog_color">
-
             <LinearLayout
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="30dp"
                     android:orientation="horizontal">
 
-                <TextView
+                <com.example.lk_etch_robot.view.BaseTextView
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="照明状态："
-                        android:textSize="11dp"
-                        android:textColor="@color/red"/>
+                        android:layout_height="wrap_content"
+                        app:drawer_image_left="@drawable/ic_light"
+                        app:tv_title="照明:" />
 
                 <TextView
                         android:id="@+id/tvLightState"
@@ -60,17 +47,34 @@
             </LinearLayout>
             <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_weight="1.2"
+                    android:layout_weight="1"
                     android:layout_height="30dp"
                     android:orientation="horizontal">
 
+                <com.example.lk_etch_robot.view.BaseTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:drawer_image_left="@drawable/ic_lifting"
+                        app:tv_title="升降:" />
                 <TextView
+                        android:id="@+id/tvLiftingState"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:textSize="11dp"
-                        android:text="工作电源："
                         android:textColor="@color/red"/>
+            </LinearLayout>
+            <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="30dp"
+                    android:orientation="horizontal">
+
+                <com.example.lk_etch_robot.view.BaseTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:drawer_image_left="@drawable/ic_current_supply"
+                        app:tv_title="电源:" />
 
                 <TextView
                         android:id="@+id/tvCurrentSupply"
@@ -82,93 +86,15 @@
             </LinearLayout>
             <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_weight="1.1"
-                    android:layout_height="30dp"
-                    android:orientation="horizontal">
-
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="主电源电量："
-                        android:textSize="11dp"
-                        android:textColor="@color/red"/>
-
-
-                <com.example.lk_etch_robot.view.BatteryView
-                        android:id="@+id/bvMainElectQuantity"
-                        android:layout_width="35dp"
-                        android:layout_height="15dp"
-                        android:layout_marginTop="2dp"
-                        android:layout_gravity="center"/>
-            </LinearLayout>
-            <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="1.1"
-                    android:layout_height="30dp"
-                    android:orientation="horizontal">
-
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="备用电源电量："
-                        android:textSize="11dp"
-                        android:textColor="@color/red"/>
-                <com.example.lk_etch_robot.view.BatteryView
-                        android:id="@+id/bvElectQuantity"
-                        android:layout_width="35dp"
-                        android:layout_height="15dp"
-                        android:layout_marginTop="2dp"
-                        android:layout_gravity="center"/>
-            </LinearLayout>
-
-        </LinearLayout>
-        <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="32dp"
-                android:orientation="horizontal"
-                android:paddingLeft="5dp"
-                android:layout_marginRight="35dp"
-                android:layout_marginTop="32dp"
-                android:background="@color/dialog_color">
-
-            <LinearLayout
-                    android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="30dp"
                     android:orientation="horizontal">
 
-                <TextView
+                <com.example.lk_etch_robot.view.BaseTextView
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:textSize="11dp"
-                        android:text="升降状态："
-                        android:textColor="@color/red"/>
-
-                <TextView
-                        android:id="@+id/tvLiftingState"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:textSize="11dp"
-                        android:textColor="@color/red"/>
-            </LinearLayout>
-            <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="1.2"
-                    android:layout_height="30dp"
-                    android:orientation="horizontal">
-
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="工作电流："
-                        android:textSize="11dp"
-                        android:textColor="@color/red"/>
-
+                        android:layout_height="wrap_content"
+                        app:drawer_image_left="@drawable/ic_current"
+                        app:tv_title="电流:" />
                 <TextView
                         android:id="@+id/tvCurrent"
                         android:layout_width="wrap_content"
@@ -179,20 +105,18 @@
             </LinearLayout>
             <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_weight="1.1"
+                    android:layout_weight="1"
                     android:layout_height="30dp"
                     android:orientation="horizontal">
 
-                <TextView
+                <com.example.lk_etch_robot.view.BaseTextView
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="运 行  距 离："
-                        android:textSize="11dp"
-                        android:textColor="@color/red"/>
+                        android:layout_height="wrap_content"
+                        app:drawer_image_left="@drawable/ic_main_elect"
+                        app:tv_title="主电:" />
 
                 <TextView
-                        android:id="@+id/tvDistance"
+                        android:id="@+id/tvMainElectQuantity"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center"
@@ -201,113 +125,165 @@
             </LinearLayout>
             <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_weight="1.1"
+                    android:layout_weight="1"
                     android:layout_height="30dp"
-                    android:visibility="invisible"
                     android:orientation="horizontal">
 
+                <com.example.lk_etch_robot.view.BaseTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:drawer_image_left="@drawable/ic_elect"
+                        app:tv_title="备电:" />
                 <TextView
+                        android:id="@+id/tvElectQuantity"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="备用电源电量："
                         android:textSize="11dp"
                         android:textColor="@color/red"/>
-                <com.example.lk_etch_robot.view.BatteryView
-                        android:layout_width="35dp"
-                        android:layout_height="15dp"
-                        android:layout_marginTop="2dp"
-                        android:layout_gravity="center"/>
             </LinearLayout>
 
+            <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="30dp"
+                    android:orientation="horizontal">
 
+                <com.example.lk_etch_robot.view.BaseTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:drawer_image_left="@drawable/ic_distance"
+                        app:tv_title="距离:" />
+
+                <TextView
+                        android:id="@+id/tvDistance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:textSize="11dp"
+                        android:textColor="@color/red" />
+            </LinearLayout>
         </LinearLayout>
     </FrameLayout>
 
 
-    <com.example.lk_etch_robot.view.HeightView
-            android:id="@+id/heightView"
-            android:layout_width="25dp"
-            android:layout_height="match_parent"
-            android:layout_marginTop="68dp"
-            android:layout_gravity="left"/>
+<!--    <com.example.lk_etch_robot.view.HeightView-->
+<!--            android:id="@+id/heightView"-->
+<!--            android:layout_width="25dp"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_marginTop="68dp"-->
+<!--            android:layout_gravity="left"/>-->
+    
+    <FrameLayout
+            android:layout_width="15dp"
+            android:layout_height="305dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="5dp">
+        <ImageView
+                android:id="@+id/ivHeight"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="bottom"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_height"/>
+        <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_scale"
+                android:scaleType="fitXY"/>
+    </FrameLayout>
 
     <TextView
             android:id="@+id/tvHeight"
-            android:layout_width="15dp"
-            android:layout_height="match_parent"
-            android:layout_marginTop="80dp"
-            android:layout_marginBottom="50dp"
-            android:layout_gravity="left"
-            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:textColor="@color/red"
             android:gravity="center"
             android:ems="1"
-            android:text="抬升高度30"
-            android:textSize="10dp"
-            android:layout_marginLeft="1dp"/>
-    <RadioGroup
-            android:id="@+id/radioGroup"
+            android:text="抬升高度0"
+            android:textSize="14dp"
+            android:layout_marginLeft="23dp" />
+
+    <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="right"
-            android:background="@color/dialog_color"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
-        <com.example.lk_etch_robot.view.BaseButton
-                android:id="@+id/rbCamera"
-                style="@style/MainRadionButton"
-                android:drawableTop="@drawable/ic_camera"
-                android:drawableTintMode="screen"
-                android:text="截图"
-                android:textColor="@color/whith"
-                android:textSize="11dp"
-                app:bg_color="@color/none_color" />
+        <ImageView
+                android:id="@+id/ivMenu"
+                android:layout_width="28dp"
+                android:layout_height="45dp"
+                android:layout_gravity="center"
+                android:orientation="vertical"
+                android:src="@drawable/ic_menu" />
 
-        <com.example.lk_etch_robot.view.BaseButton
-                android:id="@+id/rbVideo"
-                style="@style/MainRadionButton"
-                android:drawableTop="@drawable/ic_video"
-                android:text="录像"
-                android:textColor="@color/whith"
-                android:textSize="11dp"
-                app:bg_color="@color/none_color" />
+        <RadioGroup
+                android:id="@+id/radioGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="right"
+                android:background="@color/dialog_color"
+                android:orientation="vertical"
+                android:visibility="gone">
 
-        <com.example.lk_etch_robot.view.BaseButton
-                android:id="@+id/rbVideoClose"
-                style="@style/MainRadionButton"
-                android:drawableTop="@drawable/ic_video_close"
-                android:text="录像"
-                android:textColor="@color/whith"
-                android:textSize="11dp"
-                android:visibility="gone"
-                app:bg_color="@color/none_color" />
+            <com.example.lk_etch_robot.view.BaseButton
+                    android:id="@+id/rbCamera"
+                    style="@style/MainRadionButton"
+                    android:drawableTop="@drawable/ic_camera"
+                    android:drawableTintMode="screen"
+                    android:text="截图"
+                    android:textColor="@color/whith"
+                    android:textSize="11dp"
+                    app:bg_color="@color/none_color" />
 
-        <com.example.lk_etch_robot.view.BaseButton
-                android:id="@+id/rbAlbum"
-                style="@style/MainRadionButton"
-                android:drawableTop="@drawable/ic_file"
-                android:text="文件夹"
-                android:textColor="@color/whith"
-                android:textSize="11dp"
-                app:bg_color="@color/none_color" />
+            <com.example.lk_etch_robot.view.BaseButton
+                    android:id="@+id/rbVideo"
+                    style="@style/MainRadionButton"
+                    android:drawableTop="@drawable/ic_video"
+                    android:text="录像"
+                    android:textColor="@color/whith"
+                    android:textSize="11dp"
+                    app:bg_color="@color/none_color" />
 
-        <com.example.lk_etch_robot.view.BaseButton
-                android:id="@+id/rbSetting"
-                style="@style/MainRadionButton"
-                android:drawableTop="@drawable/ic_setting"
-                android:text="设置"
-                android:textColor="@color/whith"
-                android:textSize="11dp"
-                app:bg_color="@color/none_color" />
+            <com.example.lk_etch_robot.view.BaseButton
+                    android:id="@+id/rbVideoClose"
+                    style="@style/MainRadionButton"
+                    android:drawableTop="@drawable/ic_video_close"
+                    android:text="录像"
+                    android:textColor="@color/whith"
+                    android:textSize="11dp"
+                    android:visibility="gone"
+                    app:bg_color="@color/none_color" />
 
-        <com.example.lk_etch_robot.view.BaseButton
-                android:id="@+id/rbBack"
-                style="@style/MainRadionButton"
-                android:drawableTop="@drawable/ic_small1"
-                android:text="最小化"
-                android:textColor="@color/whith"
-                android:textSize="11dp"
-                app:bg_color="@color/none_color" />
+            <com.example.lk_etch_robot.view.BaseButton
+                    android:id="@+id/rbAlbum"
+                    style="@style/MainRadionButton"
+                    android:drawableTop="@drawable/ic_file"
+                    android:text="文件夹"
+                    android:textColor="@color/whith"
+                    android:textSize="11dp"
+                    app:bg_color="@color/none_color" />
 
-    </RadioGroup>
+            <com.example.lk_etch_robot.view.BaseButton
+                    android:id="@+id/rbSetting"
+                    style="@style/MainRadionButton"
+                    android:drawableTop="@drawable/ic_setting"
+                    android:text="设置"
+                    android:textColor="@color/whith"
+                    android:textSize="11dp"
+                    app:bg_color="@color/none_color" />
+
+            <com.example.lk_etch_robot.view.BaseButton
+                    android:id="@+id/rbBack"
+                    style="@style/MainRadionButton"
+                    android:drawableTop="@drawable/ic_small1"
+                    android:text="最小化"
+                    android:textColor="@color/whith"
+                    android:textSize="11dp"
+                    app:bg_color="@color/none_color" />
+
+        </RadioGroup>
+    </LinearLayout>
 </FrameLayout>

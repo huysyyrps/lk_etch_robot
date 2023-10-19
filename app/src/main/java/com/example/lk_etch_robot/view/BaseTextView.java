@@ -24,8 +24,9 @@ public class BaseTextView extends LinearLayout {
     private AttributeSet attrs;
 
     private TextView tviewTittle;//标题
+    private ImageView ivParam;//标题
     private String tvTitle;//标题
-//    private ImageView iviewLeft;//图片
+    private int iviewLeft;//图片
     private boolean isTittle;//标题是否显示
     private boolean isleftIv;//图标是否显示
 
@@ -55,6 +56,7 @@ public class BaseTextView extends LinearLayout {
                 tvTitle = typedArray.getString(R.styleable.BaseTextView_tv_title);
                 isTittle=typedArray.getBoolean(R.styleable.BaseTextView_tv_is_title_visiable,true);
                 isleftIv=typedArray.getBoolean(R.styleable.BaseTextView_tv_is_left_iv_visiable,true);
+                iviewLeft = typedArray.getResourceId(R.styleable.BaseTextView_tv_is_left_iv,R.drawable.ic_light);
                 typedArray.recycle();
             }
         }
@@ -67,13 +69,14 @@ public class BaseTextView extends LinearLayout {
     public void initView(){
         LayoutInflater.from(MyApplication.context).inflate(R.layout.item_mytextview, this, true);
         tviewTittle= (TextView) findViewById(R.id.tvTitle);
-//        iviewLeft=(ImageView) findViewById(R.id.ivLeft);
+        ivParam=(ImageView) findViewById(R.id.ivParam);
         if(isTittle){
             tviewTittle.setVisibility(VISIBLE);
             tviewTittle.setText(tvTitle);
         }else{
             tviewTittle.setVisibility(GONE);
         }
+        ivParam.setImageResource(iviewLeft);
 //        if(isleftIv){
 //            iviewLeft.setVisibility(VISIBLE);
 //        }else {

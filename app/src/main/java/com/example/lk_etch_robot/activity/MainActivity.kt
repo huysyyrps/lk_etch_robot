@@ -60,12 +60,11 @@ class MainActivity : BaseActivity(), View.OnClickListener {
     //强制切换备用电源电量
     var changeElectQuantity = 0
     //管径
-    var  pipeDiameter = 0
+    var pipeDiameter = 0
     //保护电流
     var protectCurrent = 0.0F
     //主备电源切换
     var currentSupplyState = 2
-
     //是否显示弹窗
     var showDialog = true
 
@@ -196,7 +195,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
 //        LogUtil.e("TAG", address)
     }
 
-    /**s
+    /**
      * 数传
      */
     private fun initData() {
@@ -264,11 +263,6 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                         //编码器数字
                         val intBits = java.lang.Long.valueOf(stringData.substring(26, 34), 16).toInt()
                         val floatValue = java.lang.Float.intBitsToFloat(intBits)
-//                        var distance = java.lang.Float.intBitsToFloat(Integer.valueOf(stringData.substring(26, 34), 16))
-//                        var distance = java.lang.Float.intBitsToFloat(Integer.valueOf("40490FDB", 16))
-//                        if (distance<0){
-//                            distance=0.0F
-//                        }
                         val distanceFormat = df.format(floatValue)
                         CoroutineScope(Dispatchers.Main).launch {
                             if(currentSupplyState!=currentSupply){

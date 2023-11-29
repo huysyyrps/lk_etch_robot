@@ -18,7 +18,6 @@ object BinaryChange {
 
     /**
      * 将16进制字符串转换为byte[]
-     *
      * @param str
      * @return
      */
@@ -135,27 +134,7 @@ object BinaryChange {
     }
 
     /**
-     * 将二进制转换成16进制
-     *
-     * @param buf
-     * @return
-     *     fun parseByte2HexStr(buf: ByteArray): String? {
-    val sb = StringBuffer()
-    for (i in buf.indices) {
-    var hex = Integer.toHexString(buf[i] and 0xFF)
-    if (hex.length == 1) {
-    hex = "0$hex"
-    }
-    sb.append(hex.toUpperCase())
-    }
-    return sb.toString()
-    }
-     */
-
-
-    /**
      * 将16进制转换为二进制
-     *
      * @param hexStr
      * @return
      */

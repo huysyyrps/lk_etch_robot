@@ -23,11 +23,11 @@ class FirstFragment(var tabName:String?="") : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        Glide.with(requireActivity())
-//            .asGif()
-//            .load("file:///android_asset/first_step.gif")
-//            .diskCacheStrategy(DiskCacheStrategy.ALL)
-//            .into(ivFirst)
+        Glide.with(requireActivity())
+            .asGif()
+            .load("file:///android_asset/first_step.gif")
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .into(ivFirst)
     }
 
     override fun onDestroyView() {

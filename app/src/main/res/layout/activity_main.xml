@@ -274,6 +274,14 @@
                     android:textColor="@color/whith"
                     android:textSize="11dp"
                     app:bg_color="@color/none_color" />
+            <com.example.lk_etch_robot.view.BaseButton
+                    android:id="@+id/rbHelp"
+                    style="@style/MainRadionButton"
+                    android:drawableTop="@drawable/ic_help"
+                    android:text="帮助"
+                    android:textColor="@color/whith"
+                    android:textSize="11dp"
+                    app:bg_color="@color/none_color" />
 
             <com.example.lk_etch_robot.view.BaseButton
                     android:id="@+id/rbBack"

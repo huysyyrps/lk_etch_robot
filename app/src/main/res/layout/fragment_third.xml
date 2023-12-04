@@ -12,7 +12,7 @@
             android:layout_width="@dimen/guide_margin_left"
             android:layout_height="match_parent">
         <ImageView
-                android:id="@+id/ivFirst"
+                android:id="@+id/ivThird"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
@@ -27,14 +27,17 @@
             android:layout_marginTop="45dp">
         <TextView
                 style="@style/GuideTextView"
-                android:text="1、将该窗口最小化，打开APP ETGmini;"/>
+                android:text="1、下拉菜单栏开启热点;"/>
         <TextView
                 style="@style/GuideTextView"
-                android:text="2、长按测厚仪设置键，等待测厚仪与遥控器\n \t\t\t完成配对;"/>
+                android:text="2、将该窗口最小化，打开APP ETGmini;"/>
+        <TextView
+                style="@style/GuideTextView"
+                android:text="3、长按测厚仪设置键，等待测厚仪与遥控器\n \t\t\t完成配对;"/>
         <TextView
                 style="@style/GuideTextView"
                 android:layout_marginTop="25dp"
-                android:text="3、将测厚仪放入机器人顶部圆管,并盖上管盖;"/>
+                android:text="4、将测厚仪放入机器人顶部圆管,并盖上管盖;"/>
 
     </LinearLayout>
 

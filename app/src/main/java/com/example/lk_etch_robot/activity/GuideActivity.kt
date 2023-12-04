@@ -1,13 +1,12 @@
 package com.example.lk_etch_robot.activity
 
 import android.app.Activity
-import android.content.BroadcastReceiver
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.net.wifi.WifiManager
 import android.os.Bundle
-import android.util.Log
+import android.service.autofill.SaveCallback
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
@@ -18,14 +17,17 @@ import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.example.lk_etch_robot.R
+import com.example.lk_etch_robot.dialog.MainDialog
+import com.example.lk_etch_robot.dialog.SaveDialogCallBack
 import com.example.lk_etch_robot.fragment.FirstFragment
 import com.example.lk_etch_robot.fragment.SecondFragment
 import com.example.lk_etch_robot.fragment.ThirdFragment
-import com.example.lk_etch_robot.util.*
+import com.example.lk_etch_robot.util.DisplayUtil
+import com.example.lk_etch_robot.util.StatusBarUtils
+import com.example.lk_etch_robot.util.TransFormer
 import kotlinx.android.synthetic.main.activity_guide.*
 import java.lang.reflect.Field
 import java.lang.reflect.InvocationTargetException
-import java.security.AccessController.getContext
 
 
 class GuideActivity : AppCompatActivity(), View.OnClickListener {
@@ -120,8 +122,24 @@ class GuideActivity : AppCompatActivity(), View.OnClickListener {
             R.id.tvJump -> {
 //                viewpager.currentItem = 3
                 var wifiSatae =this.isWifiApOpen()
-                if (!wifiSatae){
-                    "请下滑菜单栏开启热点".showToast(this)
+                if (!wifiSatae) {
+//                    var intent = Intent(Settings.ACTION_WIRELESS_SETTINGS)
+//                    startActivity(intent)
+//                    "请下滑菜单栏开启热点".showToast(this)
+                    MainDialog().showWifiDialog(this, object : SaveDialogCallBack {
+                        override fun callBack(name: String) {
+                            val intent = Intent()
+                            intent.addCategory(Intent.CATEGORY_DEFAULT)
+                            intent.action = "android.intent.action.MAIN"
+                            val cn = ComponentName(
+                                "com.android.settings",
+                                "com.android.settings.Settings\$TetherSettingsActivity"
+                            )
+                            intent.component = cn
+                            startActivity(intent)
+                        }
+
+                    })
                 }else{
                     MainActivity.actionStart(this)
                     finish()

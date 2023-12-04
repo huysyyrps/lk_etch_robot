@@ -102,7 +102,8 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         rbBack.setOnClickListener(this)
         rbAlbum.setOnClickListener(this)
         ivMenu.setOnClickListener(this)
-
+        rbHelp.setOnClickListener(this)
+//        var data = "${BaseData.getYearTop()}${BaseData.getYearBotton()}${BaseData.getMonth()}${BaseData.getDay()}"
 
         val tag = intent.getStringExtra("tag")
 //        if (!tag.isNullOrEmpty()){
@@ -216,6 +217,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         //硬件串口实例921600  115200
         mServiceConnection = SerialPortConnection.newBuilder("/dev/ttyHS1", 921600).flags(1 shl 13).build()
         mServiceConnection?.setDelegate(object : SerialPortConnection.Delegate {
+            @RequiresApi(Build.VERSION_CODES.O)
             @SuppressLint("SetTextI18n")
             override fun received(bytes: ByteArray, size: Int) {
                 val stringData = ByteDataChange.ByteToString(bytes)
@@ -243,12 +245,18 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                         protectCurrent = java.lang.Float.intBitsToFloat(Integer.valueOf(stringData.substring(14, 22), 16))
                         //定时读取
                         timer.scheduleAtFixedRate(0, 1000) {
-                            val s = ByteArray(4)
-                            s[0] = 0xA1.toByte()
-                            s[1] = 0x02
-                            s[2] = 0x07
-                            s[3] = 0xAA.toByte()
-                            mServiceConnection?.sendData(s)
+                            // val arrayData = toBytes(data)
+//                            var data = "${BaseData.getYearTop()}${BaseData.getYearBotton()}${BaseData.getMonth()}${BaseData.getDay()}"
+//                            val s = ByteArray(4)
+//                            s[0] = 0xA1.toByte()
+//                            s[1] = 0x02
+//                            s[2] = 0x07
+//                            s[3] = 0xAA.toByte()
+                            var date = "${BaseData.getYearTop()}${BaseData.getYearBotton()}${BaseData.getMonth()}${BaseData.getDay()}"
+                            var data = "A10207AA${date}"
+                            data = "$data${ByteDataChange.HexStringToBytes(data)}"
+                            val arrayData = toBytes(data)
+                            mServiceConnection?.sendData(arrayData)
                         }
                     }
                 }
@@ -423,6 +431,9 @@ class MainActivity : BaseActivity(), View.OnClickListener {
             }
             R.id.rbAlbum -> {
                 MainUi.showPopupMenu(rbAlbum, "Desc", this)
+            }
+            R.id.rbHelp->{
+                UserInfoActivity.actionStart(this@MainActivity)
             }
             R.id.rbBack -> {
                 if (checkOverlayDisplayPermission()) {

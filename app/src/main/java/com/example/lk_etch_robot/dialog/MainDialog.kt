@@ -1,8 +1,10 @@
 package com.example.lk_etch_robot.dialog
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.AlertDialog
 import android.os.Build
+import android.service.autofill.SaveCallback
 import android.view.LayoutInflater
 import android.widget.SeekBar
 import androidx.annotation.RequiresApi
@@ -17,6 +19,7 @@ import com.warkiz.tickseekbar.TickSeekBar
 import kotlinx.android.synthetic.main.dialog_battery.*
 import kotlinx.android.synthetic.main.dialog_setting.*
 import kotlinx.android.synthetic.main.dialog_setting.view.*
+import kotlinx.android.synthetic.main.dialog_wifi.view.*
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -256,6 +259,21 @@ class MainDialog {
         dialog.btnSaveSure.setOnClickListener {
             dialog.dismiss()
         }
+    }
+
+    fun showWifiDialog(activity: Activity, param: SaveDialogCallBack){
+        val builder = AlertDialog.Builder(activity)
+        val view = LayoutInflater.from(activity).inflate(R.layout.dialog_wifi, null)
+        builder.setView(view)
+        val dialog = builder.create()
+        view.btnWifiCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+        view.btnWifiSure.setOnClickListener {
+            dialog.dismiss()
+            param.callBack("")
+        }
+        dialog.show()
     }
 
     /**

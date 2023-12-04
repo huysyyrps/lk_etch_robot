@@ -28,6 +28,7 @@
     <string name="equipment_startup_and_operation">设备开机与操作</string>
     <string name="jump">跳过</string>
     <string name="small">最小化</string>
+    <string name="user_info">说明书</string>
 
     <string name="first_fragment_first_step">1、取出测厚仪，按电源键打开测厚仪;</string>
     <string name="first_fragment_second_step">2、取出机器人，将电池放入机器人电池仓;</string>

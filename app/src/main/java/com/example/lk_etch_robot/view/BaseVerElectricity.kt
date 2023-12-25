@@ -39,9 +39,9 @@ class BaseVerElectricity constructor(context: Context?, attrs: AttributeSet? = n
             paintFill.color = resources.getColor(R.color.white)
             paintBor.color = resources.getColor(R.color.white)
         }
-        canvas.drawRect(0F, 10F, 40F, 73F, paintBor)
-        canvas.drawRect(0F, 73-73F*(electricity/100F)+10, 40F, 73F, paintFill)
-        canvas.drawRect(10F, 3F, 30F, 10F, paintFill)
+        canvas.drawRect(0F, 10F, 35F, 70F, paintBor)
+        canvas.drawRect(0F, 70-70F*(electricity/100F)+10, 35F, 70F, paintFill)
+        canvas.drawRect(10F, 3F, 25F, 10F, paintFill)
     }
 
     @Synchronized

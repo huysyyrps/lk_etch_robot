@@ -36,21 +36,21 @@ class BaseElectricity constructor(context: Context?, attrs: AttributeSet? = null
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         if (electricity == 100) {
-            canvas.drawArc(0F, 3F, 70F, 73F, 0F, 360F, false, paintFill)
+            canvas.drawArc(3F, 3F, 70F, 73F, 0F, 360F, false, paintFill)
             paintText.color = resources.getColor(R.color.electricity_color)
             canvas.drawText(electricity.toString(), 12F, 45F, paintText)
         } else {
             if (electricity > 10) {
-                canvas.drawArc(0F, 3F, 70F, 73F, -90F, 36F, false, paintFillRed)
-                canvas.drawArc(0F, 3F, 70F, 73F, -54F, 336F * ((electricity-10) / 90F), false, paintFill)
+                canvas.drawArc(3F, 3F, 70F, 73F, -90F, 36F, false, paintFillRed)
+                canvas.drawArc(3F, 3F, 70F, 73F, -54F, 336F * ((electricity-10) / 90F), false, paintFill)
                 paintText.color = resources.getColor(R.color.electricity_color)
                 canvas.drawText(electricity.toString(), 20F, 45F, paintText)
             } else if (electricity < 10) {
-                canvas.drawArc(0F, 3F, 70F, 73F, -90F, electricity*3.6F, false, paintFillRed)
+                canvas.drawArc(3F, 3F, 70F, 73F, -90F, electricity*3.6F, false, paintFillRed)
                 paintText.textSize=35F
                 canvas.drawText(electricity.toString(), 28F, 48F, paintText)
             }else if (electricity == 10) {
-                canvas.drawArc(0F, 3F, 70F, 73F, -59F, electricity*3.6F, false, paintFillRed)
+                canvas.drawArc(3F, 3F, 70F, 73F, -59F, electricity*3.6F, false, paintFillRed)
                 paintText.textSize=35F
                 canvas.drawText(electricity.toString(), 20F, 48F, paintText)
             }

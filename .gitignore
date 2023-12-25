@@ -12,4 +12,7 @@
 /captures
 .externalNativeBuild
 .cxx
+*.gif
+*.xlsx
+src/main/assets
 local.properties

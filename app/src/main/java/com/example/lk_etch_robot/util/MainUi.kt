@@ -32,4 +32,27 @@ object MainUi {
         popupMenu.setOnDismissListener { }
         popupMenu.show()
     }
+
+    fun showPopupMenu1(view: View?, tag: String?, context: Context) {
+        // View当前PopupMenu显示的相对View的位置
+        val popupMenu = PopupMenu(context, view)
+        // menu布局
+        popupMenu.menuInflater.inflate(R.menu.dialog, popupMenu.menu)
+        // menu的item点击事件
+        popupMenu.setOnMenuItemClickListener { item ->
+            if (item.title == "图片") {
+                val intent = Intent(context, ImageListActivity::class.java)
+                intent.putExtra("tag", tag)
+                context.startActivity(intent)
+            } else if (item.title == "视频") {
+                val intent = Intent(context, VideoListActivity::class.java)
+                intent.putExtra("tag", tag)
+                context.startActivity(intent)
+            }
+            false
+        }
+        // PopupMenu关闭事件
+        popupMenu.setOnDismissListener { }
+        popupMenu.show()
+    }
 }

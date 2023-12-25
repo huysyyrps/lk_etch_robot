@@ -99,6 +99,19 @@ public class DisplayUtil {
         }
     }
 
+    public void hideBottomUIMenu(Activity activity) {
+        //隐藏虚拟按键，并且全屏
+        if (Build.VERSION.SDK_INT > 11 && Build.VERSION.SDK_INT < 19) { // lower api
+            View v = activity.getWindow().getDecorView();
+            v.setSystemUiVisibility(View.GONE);
+        } else if (Build.VERSION.SDK_INT >= 19) {
+            Window _window = activity.getWindow();
+            WindowManager.LayoutParams params = _window.getAttributes();
+            params.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|View.SYSTEM_UI_FLAG_IMMERSIVE;
+            _window.setAttributes(params);
+        }
+    }
+
     /**
      * 显示底部虚拟栏
      *

@@ -49,3 +49,4 @@ dependencyResolutionManagement {
 rootProject.name = "LK_Etch_Robot"
 include ':app'
 include ':MediaProjection'
+include ':library'

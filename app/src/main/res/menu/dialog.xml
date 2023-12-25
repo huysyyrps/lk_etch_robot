@@ -6,4 +6,5 @@
     <item
         android:id="@+id/remove"
         android:title="视频" />
+
 </menu>

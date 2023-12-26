@@ -304,8 +304,12 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                             }
                             baseElectricity.baseElectricity()
                             baseElectricity.setElectricity1(mainElectQuantity)
+//                            baseElectricity.setElectricity1(50)
                             verticalBattery.baseElectricity()
                             verticalBattery.setElectricity1(electQuantity)
+                            if(electQuantity<=10){
+                                tvElectQuantity.setTextColor(resources.getColor(R.color.red))
+                            }
                             tvElectQuantity.text = "$electQuantity"
                             tvCurrent.text = currentFormat
                             if (lightState==0){

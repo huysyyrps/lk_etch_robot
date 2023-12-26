@@ -253,7 +253,7 @@
     <color name="navy">#000080</color><!--海军色 -->
     <!-- 上传图片添加的颜色 -->
     <color name="none_color">#00000000</color>
-    <color name="none_aert_color">#7F000000</color>
+    <color name="none_aert_color">#6F000000</color>
     <color name="plugin_camera_black">#000000</color>
     <color name="albumback">#E1E0DE</color>
     <color name="dengji">#2b821d</color>

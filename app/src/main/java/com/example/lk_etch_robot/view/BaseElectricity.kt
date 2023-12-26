@@ -18,7 +18,7 @@ class BaseElectricity constructor(context: Context?, attrs: AttributeSet? = null
         paintFill.style = Paint.Style.FILL// 描边填充效果 1.STROKE 描边 2.FIll 填充 3.FILL_AND_STROKE 描边+填充
         paintFill.style = Paint.Style.STROKE
         paintFill.strokeWidth = 5F
-        paintFill.color = resources.getColor(R.color.electricity_color)
+        paintFill.color = resources.getColor(R.color.white)
 
         paintFillRed.isAntiAlias = true//是否抗锯齿
         paintFillRed.style = Paint.Style.FILL// 描边填充效果 1.STROKE 描边 2.FIll 填充 3.FILL_AND_STROKE 描边+填充
@@ -37,13 +37,13 @@ class BaseElectricity constructor(context: Context?, attrs: AttributeSet? = null
         super.onDraw(canvas)
         if (electricity == 100) {
             canvas.drawArc(3F, 3F, 70F, 73F, 0F, 360F, false, paintFill)
-            paintText.color = resources.getColor(R.color.electricity_color)
+            paintText.color = resources.getColor(R.color.white)
             canvas.drawText(electricity.toString(), 12F, 45F, paintText)
         } else {
             if (electricity > 10) {
                 canvas.drawArc(3F, 3F, 70F, 73F, -90F, 36F, false, paintFillRed)
-                canvas.drawArc(3F, 3F, 70F, 73F, -54F, 336F * ((electricity-10) / 90F), false, paintFill)
-                paintText.color = resources.getColor(R.color.electricity_color)
+                canvas.drawArc(3F, 3F, 70F, 73F, -54F, 306F * ((electricity-10) / 90F), false, paintFill)
+                paintText.color = resources.getColor(R.color.white)
                 canvas.drawText(electricity.toString(), 20F, 45F, paintText)
             } else if (electricity < 10) {
                 canvas.drawArc(3F, 3F, 70F, 73F, -90F, electricity*3.6F, false, paintFillRed)

@@ -128,7 +128,7 @@
                                 style="@style/DataTextView"
                                 android:gravity="center|left"
                                 android:layout_marginRight="30dp"
-                                android:text="90%" />
+                                android:text="90" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -201,7 +201,7 @@
                     android:layout_width="40dp"
                     android:layout_height="match_parent"
                     android:layout_alignParentRight="true"
-                    android:layout_marginRight="95dp"
+                    android:layout_marginRight="85dp"
                     android:padding="9dp"
                     android:src="@drawable/ic_current_supply" />
             <LinearLayout
@@ -258,7 +258,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left|center_vertical"
-                android:textColor="@color/red"
+                android:textColor="@color/white"
                 android:gravity="center"
                 android:ems="1"
                 android:text="抬升高度0"
@@ -277,12 +277,13 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="right"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="gone"
+                android:background="@color/none_aert_color">
 
             <com.example.lk_etch_robot.view.BaseButton
                     android:id="@+id/rbCamera"
                     style="@style/MainRadionButton"
-                    android:drawableTop="@drawable/ic_camera"
+                    android:drawableTop="@drawable/ic_camer"
                     android:drawableTintMode="screen"
                     android:text="截图"
                     android:textColor="@color/whith"
@@ -337,7 +338,7 @@
             <com.example.lk_etch_robot.view.BaseButton
                     android:id="@+id/rbSmall"
                     style="@style/MainRadionButton"
-                    android:drawableTop="@drawable/ic_small1"
+                    android:drawableTop="@drawable/ic_small"
                     android:text="最小化"
                     android:textColor="@color/whith"
                     android:textSize="11dp"
